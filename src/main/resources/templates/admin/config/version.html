@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/adminlayout}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/admin/list.css}" />
+    <link rel="stylesheet" th:href="@{/css/admin/config/banner.css}" />
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/admin/config/Version.js}"></script>
+</th:block>
+
+<div class="content" layout:fragment="content">
+<!--    <div th:replace="admin/include/admin_modal :: #versioncheckModal"></div>-->
+    <div th:replace="admin/include/admin_modal :: #versioninsertModal"></div>
+    <div class="dashboard">
+        <div class="content_header">
+            <h1>버전이력</h1>
+            <p>
+                HOME > 고객센터 > <strong>버전이력</strong>
+            </p>
+        </div>
+        <section class="sectionBox">
+            <h3 style="font-size: large; margin-top: 10px; margin-bottom: -10px">버전목록</h3>
+            <div class="adminp">
+                <p>사이트 버전목록 입니다.</p>
+            </div>
+            <table class="admingraph">
+                <tr class="admin_title">
+                    <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
+                    <th>번호</th>
+                    <th>버전</th>
+                    <th>작성자</th>
+                    <th>등록일시</th>
+                    <th>변경내역</th>
+                </tr>
+
+                <th:block th:each="version : ${versions}">
+                    <tr class="admin_list"> <!-- 첫 페이지의 경우 10개만 출력 -->
+                        <td><input type="checkbox" class="versionCheckbox" th:value="${version.id}"></td>
+                        <td th:text="${version.id}"></td>
+                        <td th:text="${version.version}"></td>
+                        <td th:text="${version.uid}"></td>
+                        <td th:text="${version.RDate}"></td>
+                        <td>
+                            <div th:replace="admin/include/admin_modal :: #versioncheckModal"></div>
+                            <a href="#" class="version-check"
+                               th:data-version="${version.version}"
+                               th:data-content="${version.content}"
+                               th:data-modal="versioncheckModal">[확인]</a>
+                        </td>
+                    </tr>
+                </th:block>
+
+            </table>
+            <a class="delete_btn" onclick="deleteSelectedVersions()">선택삭제</a>
+
+            <a href="#" data-modal="versioninsertModal" class="registration_btn">등록</a>
+
+            <div class="pagingBox">
+                <div class="pagingList">
+                    <a href="#" th:if="${currentPage > 0}" th:href="@{/admin/config/version(page=${currentPage - 1})}" class="prev">&#60;</a>
+
+                    <!-- 페이지 링크 생성 -->
+                    <span th:each="page : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/admin/config/version(page=${page})}"
+               th:text="${page + 1}"
+               th:classappend="${page == currentPage} ? 'active' : ''">
+            </a>
+        </span>
+
+                    <a href="#" th:if="${currentPage < totalPages - 1}" th:href="@{/admin/config/version(page=${currentPage + 1})}" class="next">&#62;</a>
+                </div>
+            </div>
+
+
+            <script>
+                const totalPages = /*[[${totalPages}]]*/ 1; // Thymeleaf로 totalPages 값을 가져옵니다.
+                const currentPage = /*[[${currentPage}]]*/ 1; // Thymeleaf로 currentPage 값을 가져옵니다.
+
+                const pageLinksContainer = document.getElementById('pageLinks');
+                for (let i = 1; i <= totalPages; i++) {
+                    const link = document.createElement('a');
+                    link.href = `/admin/config/version?page=${i - 1}`; // 0-based index로 변경
+                    link.textContent = i; // 1부터 시작하는 페이지 번호
+                    if (i - 1 === currentPage) {
+                        link.classList.add('active'); // 현재 페이지 강조
+                    }
+                    pageLinksContainer.appendChild(link); // 링크 추가
+                }
+            </script>
+
+        </section>
+
+    </div>
+
+</div>
+</html>

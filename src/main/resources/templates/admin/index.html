@@ -1,0 +1,263 @@
+<!--
+    날짜 : 2024/10/25
+    이름 : 이상훈
+    내용 : 메인화면
+
+    수정사항
+    - 2024/11/04 이도영 사이드바 이동
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin_main</title>
+    <link rel="stylesheet" th:href="@{/css/admin/admin_main.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script type="text/javascript" th:src="@{/js/admin/sidebar.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="header_wrapper">
+    <header>
+        <a href="#" id="admin_logo">
+            <img th:src="@{/images/admin/logo(wh).png}" alt="admin_logo"/>
+        </a>
+        <div class="home">
+            <a th:href="@{/}">HOME | </a>
+            <a th:href="@{/member/logout}">로그아웃 | </a>
+            <a href="#">고객센터</a> 
+        </div>
+    </header>
+</div>
+<main>
+    <th:block th:replace="~{admin/include/admin_sidebar::admin_sidebar}"></th:block>
+    <div class="content">
+        <div class="dashboard">
+            <div class="content_header">
+                <h1>관리자메인</h1>
+                <p>HOME > 관리자 메인</p>
+            </div>
+            <!-- 집계현황 Section -->
+            <div class="aggregate-status">
+                <h2>집계현황</h2>
+                <div class="charts-container">
+                    <div class="chart">
+                        <canvas id="barChart" width="400" height="400"></canvas>
+                    </div>
+                    <div class="chart">
+                        <canvas id="pieChart" width="400" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="operation-status">
+                <h2>운영현황</h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span>주문건수</span>
+                        <strong th:text="${operatingStatusQueryDTO.orderCount}">131</strong>
+                    </div>
+                    <div class="status-item">
+                        <span>주문금액</span>
+                        <strong th:text="${#numbers.formatInteger(operatingStatusQueryDTO.orderPrice, 4, 'COMMA')}">1,130,000</strong>
+
+
+
+
+                    </div>
+                    <div class="status-item">
+                        <span>회원가입</span>
+                        <strong th:text="${operatingStatusQueryDTO.memberRegistration}">1,014</strong>
+                    </div>
+                    <div class="status-item">
+                        <span>방문자 수</span>
+                        <strong th:text="${operatingStatusQueryDTO.visitCount}">1,014</strong>
+                    </div>
+                    <div class="status-item">
+                        <span>신규 게시물</span>
+                        <strong th:text="${operatingStatusQueryDTO.newPostCount}">14</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-status">
+                <h2>주문현황</h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span>입금대기</span>
+                        <strong>101</strong>
+                        <p>오늘: 60 / 어제: 71</p>
+                    </div>
+                    <div class="status-item">
+                        <span>배송준비</span>
+                        <strong>124</strong>
+                        <p>오늘: 102 / 어제: 130</p>
+                    </div>
+                    <div class="status-item">
+                        <span>취소요청</span>
+                        <strong>14</strong>
+                        <p>오늘: 1 / 어제: 3</p>
+                    </div>
+                    <div class="status-item">
+                        <span>교환요청</span>
+                        <strong>7</strong>
+                        <p>오늘: 1 / 어제: 2</p>
+                    </div>
+                    <div class="status-item">
+                        <span>반품요청</span>
+                        <strong>24</strong>
+                        <p>오늘: 3 / 어제: 5</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tables">
+                <div class="notice">
+                    <div class="notice_header">
+                        <h3>공지사항</h3>
+                        <a th:href="@{/admin/layout/cs/notice/list}">전체보기</a>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>[안내] 해외 결제사 칩 문자주의</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td>[안내] 로젠택배 반품/교환 수거지</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td>[안내] 위치정보 이용약관 개정</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td>[안내] 구매 회원 이용약관 개정</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td>[안내] 시스템 점검 예정</td>
+                            <td>22.10.31</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="inquiries">
+                    <div class="inquiries_header">
+                        <h3>고객문의</h3>
+                        <a th:href="@{/admin/layout/cs/qna/list}">전체보기</a>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>[가입] 가입 문의 내용</td>
+                            <td>chh**</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td>[탈퇴] 탈퇴 문의 내용</td>
+                            <td>chh**</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td>[회원정보] 회원 정보 문의</td>
+                            <td>chh**</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td>[회원정보] 회원 정보 문의</td>
+                            <td>chh**</td>
+                            <td>22.10.31</td>
+                        </tr>
+                        <tr>
+                            <td>[회원정보] 회원 정보 문의</td>
+                            <td>chh**</td>
+                            <td>22.10.31</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        const orderDailyQueryDtoList = /*[[${orderDailyQueryDtoList}]]*/ []
+        const labels = orderDailyQueryDtoList.map(dto => dto.orderDate)
+        const orderedData = orderDailyQueryDtoList.map(dto => dto.orderCount)
+        const deliveredData = orderDailyQueryDtoList.map(dto => dto.deliveredCount)
+        const completeData = orderDailyQueryDtoList.map(dto => dto.completeCount)
+
+        // Bar chart for orders, payments, and cancellations
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        const barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: labels, // Replace with actual dates
+                datasets: [
+                    {
+                        label: '주문완료',
+                        data: orderedData, // Replace with actual order data
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    },
+                    {
+                        label: '배송완료',
+                        data: deliveredData, // Replace with actual payment data
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    },
+                    {
+                        label: '수취완료',
+                        data: completeData, // Replace with actual cancellation data
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    }
+                ]
+            },
+            productOptions: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const orderItemSalesRatioQueryDTOList = /*[[${orderItemSalesRatioQueryDtoList}]]*/ []
+        const labelsData = orderItemSalesRatioQueryDTOList.map(dto => dto.cateName);
+        const salesData = orderItemSalesRatioQueryDTOList.map(dto => dto.salesPrice);
+        // Pie chart for sales categories
+        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        const pieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: labelsData, // Sales categories
+                datasets: [{
+                    label: '주요 매출',
+                    data: salesData, // Replace with actual sales data
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 99, 132, 0.6)'
+                    ]
+                }]
+            },
+            productOptions: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: '주요 매출'
+                    }
+                }
+            }
+        });
+    </script>
+
+</main>
+<div class="footer_wrapper">
+    <footer >
+        <div id="version">LotteON ADMINISTRATOR [[${version.version}]]</div>
+        <div id="copyright">
+            Copyrightⓒ LotteOn_Team1 All rights reserved.
+        </div>
+    </footer>
+</div>
+</body>
+</html>

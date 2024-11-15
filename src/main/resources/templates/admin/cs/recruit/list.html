@@ -1,0 +1,96 @@
+<!--날짜 : 2024/11/01-->
+<!--이름 : 강유정-->
+<!--내용 : 채용 서비스 생성-->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/adminlayout}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/admin/cs/recruit/list.css}" />
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/modal/modal.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/recruit/recruit.js}"></script>
+    <script type="text/javascript" th:src="@{/js/modal/adminSearchPeriod.js}"></script>
+</th:block>
+
+<div class="content" layout:fragment="content">
+    <div th:replace="admin/include/admin_modal :: #employmodal"></div>
+    <div class="dashboard">
+        <div class="content_header">
+            <h1>채용하기 목록</h1>
+            <p>
+                HOME > 고객센터 > <strong>채용하기</strong>
+            </p>
+        </div>
+
+        <section class="sectionBox">
+            <div>
+                <form action="/admin/cs/recruit/list" class="search_bar">
+                    <select name="type">
+                        <option value="recruitId">번호</option>
+                        <option value="recruitPosition">채용부서</option>
+                        <option value="recruitType">채용형태</option>
+                        <option value="recruitTitle">제목</option>
+                    </select>
+                    <input class="searchInput" type="text" name="keyword">
+                    <input type="hidden" name="prodSeller" value="ADMIN" readonly>
+                    <input class="searchBtn" type="submit" value="검색">
+                </form>
+            </div>
+            <table class="admingraph">
+                <tr class="admin_title">
+                    <th><input type="checkbox" name="allCheck" id="selectAll"/></th>
+                    <th>번호</th>
+                    <th>채용부서</th>
+                    <th>경력사항</th>
+                    <th>채용형태</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>상태</th>
+                    <th>모집기간</th>
+                    <th>작성일</th>
+                </tr>
+
+                <tr class="admin_list" th:each="recruit,number : ${recruitResponses.dtoList}">
+                    <th><input type="checkbox" class="delete-checkbox" th:value="${recruit.recruitid}" /></th>
+                    <td th:text="${currentPage * newPageRequestDTO.size + number.index - 4}">번호</td>
+                    <td th:text="${recruit.position}">광고사업</td>
+                    <td th:text="${recruit.history}">경력 4~15년</td>
+                    <td th:text="${recruit.type}">정규직</td>
+                    <td th:text="${recruit.title}">광고 플랫폼 기획</td>
+                    <th:block th:if="${role} == 'Admin' ">
+                        <td>관리자</td> <!-- member 객체의 name 속성 표시 -->
+                    </th:block>
+                    <td th:text="${recruit.status}">모집중</td>
+                    <td th:text="${recruit.displayStartDate} + ' ~ ' + ${recruit.displayEndDate}">2024-10-27 ~ 2024-11-01</td>
+                    <td th:text="${#strings.replace(recruit.rDate, 'T', ' ')}">2024-10-27 12:00:00</td>
+                </tr>
+
+            </table>
+            <a class="delete_btn" href="javascript:void(0)">선택삭제</a>
+            <a href="#" data-modal="employmodal" class="registration_btn">채용등록</a>
+
+            <div class="pagingBox">
+                <!-- 검색어가 없을 때만 페이징 버튼을 표시 -->
+                <div class="pagingList">
+                    <a th:href="@{/admin/cs/recruit/list(pg=${recruitResponses.start - 1}, type=${type}, keyword=${keyword})}" th:if="${recruitResponses.prev}" class="prev">&#60;</a>
+                    <th:block th:each="num : ${#numbers.sequence(recruitResponses.start, recruitResponses.end)}">
+                        <a th:href="@{/admin/cs/recruit/list(pg=${num}, type=${type}, keyword=${keyword})}"
+                           th:classappend="${num == recruitResponses.pg} ? 'active' : ''">[[${num}]]</a>
+                    </th:block>
+                    <a th:href="@{/admin/cs/recruit/list(pg=${recruitResponses.end + 1}, type=${type}, keyword=${keyword})}" th:if="${recruitResponses.next}" class="next">&#62;</a>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+</html>

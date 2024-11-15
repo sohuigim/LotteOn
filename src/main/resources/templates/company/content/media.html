@@ -1,0 +1,56 @@
+<div class="content" th:fragment="media">
+    <html xmlns:th="http://www.thymeleaf.org">
+    <link rel="stylesheet" th:href="@{/css/company/company.css}">
+    <!--
+        날짜 : 2024/10/25
+        이름 : 박서홍
+        내용 : 회사소개 - media html 생성
+    -->
+<div class="headContent" >
+    <div class="logoBox">
+        <a th:href="@{/}"><img th:src="@{/images/header_logo.png}" alt="로고" style="width: 185px;"/></a>
+    </div>
+
+    <div>
+        <a th:href="@{/company/index}">HOME</a>
+        <a th:href="@{/company/content/culture}">기업문화</a>
+        <a th:href="@{/company/content/story}">소식과 이야기</a>
+        <a th:href="@{/company/content/recruit}">채용</a>
+        <a class="tabOn" th:href="@{/company/content/media}">미디어</a>
+    </div>
+</div>
+
+
+        <main>
+
+            <div class="mediaHead" >미디어 세상 속 롯데ON 을 소개합니다!</div>
+
+            <div class="contentSubHead">더 다양한 LotteON 영상을 소개합니다.</div>
+
+            <div class="mediaVideo">
+                <iframe width="500" height="300" src="https://www.youtube.com/embed/AEHoUyrL6bI?autoplay=1&mute=1"
+                        title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                <div>
+                    <p>#롯데레드페스티벌 개막🎉 100만 포인트가 쏟아진다!!</p>
+                    <span> 2024 쇼핑 버라이어티, 역대 최대 혜택을 담은 <br>
+                        롯데레드페스티벌이 개막했습니다🎉</span>
+                </div>
+            </div>
+
+            <div class="mediaVideo">
+                <iframe width="500" height="300" src="https://www.youtube.com/embed/Q4_2Vkj32X4?autoplay=1&mute=1"
+                title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                <div>
+                    <p>#[롯데ON] 24년 첫 번째 롯데ON세상</p>
+                    <span>#24년 첫 번째 롯데ON세상<br>
+                        롯데월드타워에 빨간 불이 켜지면 선착순 무적쿠폰이 찾아온다!</span>
+                </div>
+            </div>
+
+
+        </main>
+
+    </div>
+</html>

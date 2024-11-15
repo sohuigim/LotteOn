@@ -1,0 +1,403 @@
+/*
+     날짜 : 2024/10/25
+     이름 : 강유정(최초 작성자)
+     내용 : user css 생성
+*/
+
+/* login */
+#wrapper {
+    width: 1020px;
+    margin: 0 auto; /* 가운데 정렬 */
+}
+.line {
+    width: 100%;
+}
+
+.loginContent {
+    padding-top: 60px;
+    width: 900px;
+    margin: auto
+}
+
+.loginWrap .userinfoservice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.inputSet input {
+    border: 1px solid #ddd;
+    height: 44px;
+    border-radius: 4px;
+    padding: 0 14px;
+    color: #333;
+    font-size: 14px
+}
+.loginFormWrapper input[type="text"],
+.loginFormWrapper input[type="password"],
+.loginFormWrapper input[type="email"],
+.loginFormWrapper input[type="tel"],
+.loginFormWrapper input[type="search"],
+.loginFormWrapper input[type="email"]{
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+.loginWrap .titLogin {
+    font-size: 25px;
+}
+.loginWrap .titLogin .find{
+    margin-left: -20px;
+}
+button {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0
+}
+
+.socialSignupWrap {
+    padding-top: 10px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.socialSignupWrap button {
+    display: inline-block;
+    margin: 0 10px;
+    padding-top: 58px;
+    width: 50px;
+    font-size: 15px;
+    color: #000;
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+    cursor: pointer;
+}
+
+.socialSignupWrap .kakaoLoginBtn {
+    background-image: url(//static.lotteon.com/p/member/assets/img/icon_easy_kakao.svg)
+}
+
+.socialSignupWrap .naverLoginBtn {
+    background-image: url(//static.lotteon.com/p/member/assets/img/icon_easy_naver.svg)
+}
+
+.socialSignupWrap .googleLoginBtn {
+    background-image: url(/images/member/google-img.png)
+}
+
+.loginButtonWithImage {
+    display: flex; /* Flexbox를 사용하여 정렬 */
+    justify-content: center; /* 가로 방향 중앙 정렬 */
+    align-items: center; /* 세로 방향 중앙 정렬 */
+    height: 100px; /* 버튼 높이 */
+    width: 80px; /* 버튼 너비 */
+    background-color: #ef2a23; /* 배경색 */
+    color: white; /* 텍스트 색상 */
+    font-size: 16px; /* 텍스트 크기 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    cursor: pointer; /* 마우스 커서 */
+    text-decoration: none; /* 링크 밑줄 없애기 */
+}
+
+.btnLogin {
+    margin: 0; /* 텍스트 주변 여백 없애기 */
+    padding: 0; /* 패딩 제거 */
+}
+
+.loginImage {
+    width: 300px;/* 이미지 너비 */
+    height: 300px;/* 이미지 높이 */
+    margin-left: 70px;/* 다른 요소와 간격 */
+    object-fit: contain;/* 이미지 비율 유지 */
+}
+
+.section_input_loginForm {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.loginFormWrapper {
+    max-height: 400px;
+    padding: 40px 0;
+    display: flex;
+    border-bottom: 2px solid #d8d8d8;
+}
+
+.login-left {
+    flex: 6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login-right {
+    flex: 4;
+}
+
+.login-right__img {
+    width: 100%;
+    height:100%;
+    object-fit: contain;
+}
+
+.awards-container {
+    height:100px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 0;
+}
+
+/* join */
+
+.title-join{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 10px;
+}
+
+.wel-join {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.membership-productOptions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10%;
+}
+
+.productOption-join {
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 0 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.red-bg {
+    font-size: 1rem;
+    padding: 10px;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #ef2a23;
+    width: 280px;
+}
+
+.blue-bg {
+    font-size: 1rem;
+    padding: 10px;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #114c5e;
+    width: 280px;
+}
+
+.content-join {
+    padding: 20px;
+}
+
+.gray-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: #d2d6da;
+    color: black;
+    margin-top: 10px;
+}
+
+.gray-text {
+    color: #808080; /* 회색 */
+}
+
+/* signup */
+
+.sighup{
+    width: 1020px;
+
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.form-group textarea {
+    width: 100%;
+    height: 105px;
+    resize: none;
+    margin-bottom: 10px;
+    background-color: #f0f0f0;
+}
+/* 체크박스와 레이블을 오른쪽으로 배치 */
+.checkbox-container {
+    display: flex;
+    justify-content: flex-end;
+}
+.form-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+.submit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+.submit-btn:hover {
+    background-color: #ff3333;
+}
+
+.hr-line{
+    font-weight: bold;
+}
+
+/* register */
+.heighttable {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.heighttable tr {height: 47px;}
+
+.heighttable th,
+.heighttable td {
+    border-top: 0.4px solid #A6A6A6;
+    border-bottom: 0.4px solid #A6A6A6;
+}
+
+.heighttable th {
+    background-color: #F2F2F2;
+    width: 143px;
+    font-size: 13px;
+}
+
+.heighttable td {
+    padding-left: 15px;
+}
+.modal-section {padding: 15px 22.5px 20px 22.5px;}
+
+.registerbuttondiv {
+    display: flex;
+    justify-content: center;
+}
+.registerbutton {
+    background-color: #ef2a23;
+    border: none;
+    width: 100%;
+    height: 40px;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    line-height: 40px;
+    font-size: 15px;
+}
+
+.user-section{
+    padding-top: 40px;
+    width: 670px;
+    justify-content: center;
+    margin: 0 auto;
+}
+.user-section h3{
+    text-align: center;
+}
+.user-section td{
+    text-align: left;
+}
+.user-section input[type="text"],
+.user-section input[type="date"],
+.user-section input[type="password"],
+.user-section input[type="email"],
+.user-section select
+{
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border: 0.4px solid #555c63; /* 테두리 색상 */
+    border-radius: 5px; /* 둥근 모서리로 부드러운 느낌 */
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.user-section input[type="text"]:focus,
+.user-section input[type="date"]:focus,
+.user-section input[type="password"]:focus,
+.user-section input[type="email"]:focus,
+.user-section select:focus,
+.user-section textarea:focus{
+    outline: none; /* 기본 아웃라인 제거 */
+    border-color: gray; /* 포커스 시 테두리 색상 변경 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 포커스 시 그림자 강조 */
+    background-color: #ffffff; /* 포커스 시 배경 강조 */
+}
+.infobutton {
+    height: 30px;
+    width: 90px;
+    background-color: #343b4d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    line-height: 30px;
+}
+#address1,
+#address2 {
+    width: 335px; /* 원하는 비율로 설정 (여기서는 100%로 설정해 부모의 전체 너비를 사용) */
+    box-sizing: border-box; /* padding이 너비에 포함되도록 설정 */
+}
+.required {
+    color: red;
+    font-weight: bold;
+}
+.findnote{
+    padding-bottom: 50px;
+}
+.find-btndiv {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+.find-btndiv1 {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+.find-btndiv .infobutton {
+    background-color: #ff4d4d;
+}
+
+.find-btndiv .infobutton1 {
+    height: 30px;
+    width: 90px;
+    background-color: #343b4d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    line-height: 30px;
+}

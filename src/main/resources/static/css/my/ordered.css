@@ -1,0 +1,339 @@
+/* #wrapper */
+#wrapper {
+    width: 1200px;
+    margin: 0 auto;
+}
+section {
+    margin-left: 20px;
+}
+
+/* 기본 정보 스타일 개선 */
+.info {
+    display: flex;
+    align-items: flex-start;
+    margin: 10px;
+}
+.info ul {
+    list-style: none;
+    padding: 0;
+    width: 200px;
+    border-right: 1px solid #e0e0e0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0 10px 10px 0;
+}
+.info ul li {
+    padding: 12px 0;
+    text-align: center;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.2s ease;
+}
+.info ul li:hover {
+    color: #d9201f;
+    cursor: pointer;
+}
+
+
+/* 현재 선택된 항목 스타일 */
+.info ul li.active {
+    background-color: #f8d7da; /* 연한 레드 배경 */
+    color: #d9201f;
+    font-weight: bold;
+    border-left: 5px solid #ef2a23;
+}
+
+
+/* 나의 쇼핑정보 */
+.myinfotopside {
+    height: 80px;
+    background-color: #fff5f5; /* 연한 라이트 레드 배경 */
+    padding: 10px 20px;
+    border-bottom: 2px solid #ef2a23;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 10px 10px;
+}
+
+/* 쇼핑 정보 링크 스타일 */
+.myinfotopside .shopping-info {
+    font-size: 22px;
+    font-weight: 700;
+    color: #d9201f;
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    line-height: 2.5; /* 줄 간격을 조정하여 아래로 내림 */
+}
+
+
+
+/* 네비게이션 리스트 스타일 */
+.myinfotopside ol {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin-left: auto;
+    padding: 0;
+    float: right;
+    margin-top: auto;
+}
+
+/* 네비게이션 항목 스타일 */
+.myinfotopside ol li {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.myinfotopside ol li a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.myinfotopside ol li a:hover {
+    background-color: #ef2a23;
+    color: #fff;
+}
+
+/* 숫자 출력 스타일 */
+.myinfotopside ol li a span {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #d9201f; /* 다크 레드 컬러 */
+    margin-top: 5px;
+}
+
+
+/* 최근주문내역, 전체주문내역 상품정보 이미지 */
+.myinfotopside img {
+    height: 60px;
+    width: auto;
+    border-radius: 8px; /* 이미지 모서리 둥글게 */
+    object-fit: cover;
+}
+
+/* 마이페이지 메뉴 링크 스타일 */
+.myinfotopside ol li a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+.myinfotopside ol li a span:nth-child(2) {
+    margin-left: 3px;
+}
+
+.myinfotopside ol li a span:nth-child(4) {
+    margin-right: 10px;
+}
+
+.myinfotopside ol li a:hover {
+    color: #ff5733; /* 부드러운 레드-오렌지 컬러 */
+}
+
+
+/* 광고 배너 스타일 개선 */
+.banner {
+    display: block;
+    margin: 20px auto;
+    width: 970px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 배너에 그림자 추가 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+.banner:hover {
+    transform: scale(1.02); /* 호버 시 약간 확대 효과 */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 강화 */
+}
+
+
+/* 검색바 스타일 */
+.myinfoSearch {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+}
+.myinfoSearch p {
+    font-weight: bold;
+    margin-left: 20px;
+    font-size: 18px;
+    margin-right: 15px;
+}
+
+.myinfoSearch button {
+    background-color: #ef2a23;
+    color: #fff;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.myinfoSearch button:hover {
+    background-color: #d9201f;
+}
+
+
+
+.date-wrapper input[type="date"] {
+    width: 120px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.date-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 요소 간 간격 조정 */
+}
+
+.date-item {
+    display: flex;
+    align-items: center;
+}
+
+
+
+/* 테이블 스타일 */
+.widthtable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.widthtable th {
+    background-color: #d50e0e;
+    color: #fff;
+    padding: 10px;
+    font-size: 13px;
+
+}
+.widthtable td {
+    padding: 10px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+.widthtable tr:hover {
+    background-color: #fff5f5;
+}
+
+/* 메인 버튼 스타일 */
+.receivebutton,
+.returnbutton,
+.exchangebutton {
+    background-color: #d50e0e; /* 메인 레드 컬러 */
+    border: 0;
+    width: 133px;
+    height: 40px;
+    color: white;
+    margin-bottom: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
+    transition: background-color 0.3s ease;
+}
+
+/* 메인 버튼 호버 효과 */
+.receivebutton:hover,
+.returnbutton:hover,
+.exchangebutton:hover {
+    background-color: #b50909; /* 살짝 더 진한 레드 */
+    color: #f1f1f1; /* 약간 더 밝은 텍스트 색상 */
+}
+
+/* 리뷰 버튼 스타일 */
+.reviewbutton {
+    background-color: #bfbfbf; /* 중립적인 그레이 컬러 */
+    border: 0;
+    width: 133px;
+    height: 40px;
+    color: white;
+    margin-bottom: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* 리뷰 버튼 호버 효과 */
+.reviewbutton:hover {
+    background-color: #9e9e9e; /* 진한 그레이 */
+    color: #f1f1f1;
+}
+
+
+
+/* 버튼 정렬 */
+.button-container {
+    display: flex;
+    justify-content: space-around; /* 버튼 간격 균등 분배 */
+    align-items: center;
+    margin-top: 15px;
+}
+
+
+
+/* 페이징 박스 */
+.pagingBox {
+    display: flex;
+    position: relative;
+    margin-top: 40px;
+    justify-content: center;
+}
+
+/* 페이징 링크 스타일 */
+.pagingList > a {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #999;
+    line-height: 26px;
+    margin: 0 2px;
+    text-align: center;
+    font-family: Roboto, NotoSansKR, Malgun Gothic, AppleSDGothicNeo, Helvetica, sans-serif;
+}
+
+/* 현재 페이지 활성화 스타일 */
+.pagingList > a.active {
+    margin: 0 4px;
+    background-color: #343b4d;
+    border: 1px solid #343b4d;
+    color: #fff;
+}
+
+/* 호버 효과 */
+.pagingList > a:hover {
+    background-color: #35373d;
+}
+
+
+
+
+/* 이미지 스타일 */
+.recentproductorderimg img {
+    width: 160px;
+    height: auto;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+/* 날짜 텍스트 스타일 */
+.widthtable td:nth-child(1) {
+    color: #ef2a23;
+    font-weight: bold;
+    font-size: 15px;
+}

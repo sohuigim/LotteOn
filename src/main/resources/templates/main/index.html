@@ -1,0 +1,206 @@
+<!-- 날짜 : 2024/10/25 이름 : 이상훈 내용 : 메인 페이지 컨텐츠 영역 생성 수정이력 - 2024/10/30 강유정 - css 수정 -->
+<script>
+    window.onload = function () {
+        // URL에서 쿼리 파라미터 가져오기 메시지 정보 전달
+        const params = new URLSearchParams(window.location.search);
+        const alertMessage = params.get('message');
+
+        if (alertMessage) {
+            alert(decodeURIComponent(alertMessage));
+
+            // 쿼리 파라미터를 제거한 새 URL로 브라우저 상태를 업데이트
+            const url = new URL(window.location);
+            url.searchParams.delete('message');
+            window.history.replaceState({}, document.title, url);
+        }
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+        let currentIndex = 0;
+        const imgContainer = document.querySelector('.totalImageBox');
+        const prevButton = document.querySelector('.sliderPrev');
+        const nextButton = document.querySelector('.sliderNext');
+
+        // 서버에서 메인 배너 이미지 가져오기
+        fetch('/api/banner/slider')
+            .then(response => response.json())
+            .then(banners => {
+                imgContainer.innerHTML = ''; // 기존 이미지 제거
+                banners.forEach(banner => {
+                    const bannerLink = document.createElement('a');
+                    bannerLink.href = banner.backgroundLink || '#';
+                    bannerLink.innerHTML = `<img class="totalImageBox__img" src="${banner.img}" alt="${banner.name}" />`;
+                    imgContainer.appendChild(bannerLink);
+                });
+                updateImage(); // 초기 이미지를 슬라이더로 설정
+            })
+            .catch(error => console.error('Error fetching main banners:', error));
+
+        // 이미지 업데이트 함수
+        function updateImage() {
+            imgContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        // 다음 버튼 클릭 이벤트
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % imgContainer.childElementCount;
+            updateImage();
+        });
+
+        // 이전 버튼 클릭 이벤트
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + imgContainer.childElementCount) % imgContainer.childElementCount;
+            updateImage();
+        });
+
+        // 자동 슬라이드 기능 (4초마다)
+        setInterval(() => {
+            nextButton.click();
+        }, 4000);
+    });
+</script>
+
+<script src="https://kit.fontawesome.com/63c07008cd.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="/css/include/reset.css"/>
+<link rel="stylesheet" href="/css/main/main.css"/>
+<main>
+
+    <section>
+        <!-- 슬라이더 영역 -->
+        <section class="slider">
+            <div class="totalImageBox"></div> <!-- 이미지가 동적으로 여기에 추가됩니다 -->
+            <span class="sliderPrev">&#10096;</span>
+            <span class="sliderNext">&#10097;</span>
+        </section>
+
+        <!-- 히트상품 영역 -->
+        <h3 class="prod_h3">
+            <span id="prodHit" class="prod_span">히트상품</span>
+            <a href="#" class="prod_a">더보기 &#10095;</a>
+        </h3>
+        <section class="hit productBox">
+            <div class="product" th:each="product : ${producthits}">
+                <a th:href="@{/product/view/{id}(id=${product.id})}">
+                    <div class="thumb">
+                        <img th:src="${product.productImg1}" alt="상품 이미지" style="width: 230px; height:240px"/>
+                    </div>
+                    <h3 th:text="${product.shop.shopName}">브랜드명</h3>
+                    <p th:text="${product.productName}">상품명</p>
+                    <div class="org_price">
+                        <del th:text="${product.price} + '원'">원래 가격</del>
+                        <span th:text="${product.discountRate} + '%'">할인율</span>
+                    </div>
+                    <div class="dis_price">
+                        <ins th:text="${product.price - (product.price * (product.discountRate / 100))} + '원'">할인가</ins>
+                        <span class="product__free" th:if="${product.deliveryFee== 0}">무료배송</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+
+        <!-- 추천상품 영역 -->
+        <h3 class="prod_h3">
+            <span id="prodScore" class="prod_span">추천상품</span>
+            <a href="#" class="prod_a">더보기 &#10095;</a>
+        </h3>
+        <div th:if="${#lists.isEmpty(productreviews)}">추천 상품이 없습니다.</div>
+        <section class="recommend productBox">
+            <div class="product" th:each="product : ${productreviews}">
+                <a th:href="@{/product/view/{id}(id=${product.id})}">
+                    <div class="thumb">
+                        <img th:src="${product.productImg1}" alt="상품 이미지" style="width: 230px; height:240px"/>
+                    </div>
+                    <h3 th:text="${product.shop.shopName}">브랜드명</h3>
+                    <p th:text="${product.productName}">상품명</p>
+                    <div class="org_price">
+                        <del th:text="${product.price} + '원'">원래 가격</del>
+                        <span th:text="${product.discountRate} + '%'">할인율</span>
+                    </div>
+                    <div class="dis_price">
+                        <ins th:text="${product.price - (product.price * (product.discountRate / 100))} + '원'">할인가</ins>
+                        <span class="product__free" th:if="${product.deliveryFee== 0}">무료배송</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 최신상품 영역 -->
+        <h3 class="prod_h3">
+            <span id="prodRdate" class="prod_span">최신상품</span>
+            <a href="#" class="prod_a">더보기 &#10095;</a>
+        </h3>
+        <section class="new productBox">
+            <div class="product" th:each="product : ${productresents}">
+                <a th:href="@{/product/view/{id}(id=${product.id})}">
+                    <div class="thumb">
+                        <img th:src="${product.productImg1}" alt="상품 이미지" style="width: 230px; height:240px"/>
+                    </div>
+                    <h3 th:text="${product.shop.shopName}">브랜드명</h3>
+                    <p th:text="${product.productName}">상품명</p>
+                    <div class="org_price">
+                        <del th:text="${product.price} + '원'">원래 가격</del>
+                        <span th:text="${product.discountRate} + '%'">할인율</span>
+                    </div>
+                    <div class="dis_price">
+                        <ins th:text="${product.price - (product.price * (product.discountRate / 100))} + '원'">할인가</ins>
+                        <span class="product__free" th:if="${product.deliveryFee== 0}">무료배송</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+        <!-- 인기상품 영역 -->
+        <h3 class="prod_h3">
+            <span id="productbestofbest" class="prod_span">인기상품</span>
+            <a href="#" class="prod_a">더보기 &#10095;</a>
+        </h3>
+        <section class="discount productBox">
+            <div class="product" th:each="product : ${productbestofbest}">
+                <a th:href="@{/product/view/{id}(id=${product.id})}">
+                    <div class="thumb">
+                        <img th:src="${product.productImg1}" alt="상품 이미지" style="width: 230px; height:240px"/>
+                    </div>
+                    <h3 th:text="${product.shop.shopName}">브랜드명</h3>
+                    <p th:text="${product.productName}">상품명</p>
+                    <div class="org_price">
+                        <del th:text="${product.price} + '원'">원래 가격</del>
+                        <span th:text="${product.discountRate} + '%'">할인율</span>
+                    </div>
+                    <div class="dis_price">
+                        <ins th:text="${product.price - (product.price * (product.discountRate / 100))} + '원'">할인가</ins>
+                        <span class="product__free" th:if="${product.deliveryFee== 0}">무료배송</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+        <!-- 할인상품 영역 -->
+        <h3 class="prod_h3">
+            <span id="prodDiscount" class="prod_span">할인상품</span>
+            <a href="#" class="prod_a">더보기 &#10095;</a>
+        </h3>
+        <section class="discount productBox">
+            <div class="product" th:each="product : ${productbestdiscount}">
+                <a th:href="@{/product/view/{id}(id=${product.id})}">
+                    <div class="thumb">
+                        <img th:src="${product.productImg1}" alt="상품 이미지" style="width: 230px; height:240px"/>
+                    </div>
+                    <h3 th:text="${product.shop.shopName}">브랜드명</h3>
+                    <p th:text="${product.productName}">상품명</p>
+                    <div class="org_price">
+                        <del th:text="${product.price} + '원'">원래 가격</del>
+                        <span th:text="${product.discountRate} + '%'">할인율</span>
+                    </div>
+                    <div class="dis_price">
+                        <ins th:text="${product.price - (product.price * (product.discountRate / 100))} + '원'">할인가</ins>
+                        <span class="product__free" th:if="${product.deliveryFee== 0}">무료배송</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </section>
+</main>
+
+<!-- 스크롤 최상단 버튼 -->
+<button id="scrollTopBtn" class="scroll-top-btn" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+</button>
+<script th:src="@{/js/scrollToTop.js}"></script>

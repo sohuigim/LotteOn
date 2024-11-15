@@ -1,0 +1,69 @@
+<div class="faq" th:fragment="list">
+
+<!--
+  날짜 : 2024/10/18
+  이름 : 최준혁
+  내용 : 고객센터 자주묻는질문 목록
+
+  수정이력
+  - 2024/10/24 김소희 - 동적처리
+  - 2024/11/04 김소희 - 유형처리
+-->
+
+    <nav>
+        <div>
+            <p>홈<span>></span>자주묻는질문</p>
+        </div>
+    </nav>
+    <section class="list">
+        <aside class="cs_sidebar">
+            <h2>자주묻는질문</h2>
+            <ul>
+                <li><a th:href="@{/cs/layout/faq/list?type1=회원}" th:classappend="${type1 == '회원'} ? 'active'">회원</a></li>
+                <li><a th:href="@{/cs/layout/faq/list?type1=쿠폰/이벤트}" th:classappend="${type1 == '쿠폰/이벤트'} ? 'active'">쿠폰 / 이벤트</a></li>
+                <li><a th:href="@{/cs/layout/faq/list?type1=주문/결제}" th:classappend="${type1 == '주문/결제'} ? 'active'">주문 / 결제</a></li>
+                <li><a th:href="@{/cs/layout/faq/list?type1=배송}" th:classappend="${type1 == '배송'} ? 'active'">배송</a></li>
+                <li><a th:href="@{/cs/layout/faq/list?type1=취소/반품/환불}" th:classappend="${type1 == '취소/반품/환불'} ? 'active'">취소 / 반품 / 환불</a></li>
+                <li><a th:href="@{/cs/layout/faq/list?type1=여행/숙박/항공}" th:classappend="${type1 == '여행/숙박/항공'} ? 'active'">여행 / 숙박 / 항공</a></li>
+                <li><a th:href="@{/cs/layout/faq/list?type1=안전결제}" th:classappend="${type1 == '안전결제'} ? 'active'">안전결제</a></li>
+            </ul>
+        </aside>
+
+        <article class="faq_article">
+            <nav>
+                <h1 th:text="${type1}">카테고리 이름</h1>
+                <h2 th:text="${type1} + ' 관련 자주 묻는 질문입니다.'">카테고리 설명</h2>
+            </nav>
+            <div class="faq-section">
+                <div class="pagination">
+                    <!-- 페이지 버튼이 여기에 추가됩니다. -->
+                </div>
+
+                <!-- FAQ 목록 동적 처리 -->
+                <div th:if="${faqs.isEmpty()}">
+                    <p>현재 선택한 카테고리에 대한 자주 묻는 질문이 없습니다.</p>
+                </div>
+                <div th:each="entry : ${faqs}">
+                    <script th:inline="javascript">
+                        var a = /*[[${entry}]]*/ 'aaa'
+                        console.log(a)
+                    </script>
+                    <h2 th:text="${entry.key}">카테고리</h2> <!-- type2 카테고리 표시 -->
+                    <div class="faq-category" th:data-type2="${entry.key}">
+                        <div th:each="faq, faqStat : ${entry.value}" class="faq-item" th:style="${faqStat.index >= 3 ? 'display:none' : ''}">
+                            <!-- FAQ 질문 -->
+                            <a th:href="@{/cs/layout/faq/view/{id}(id=${faq.id})}" class="question" th:text="'Q. ' + ${faq.title}">Q. 질문 내용</a>
+                        </div>
+                        <!-- 간단히 보기 / 더 보기 버튼 -->
+                        <button class="simple-view" th:onclick="toggleFaqView([[${entry.key}]], 'simple')">간단히 보기</button>
+                        <button class="more-view" th:onclick="toggleFaqView([[${entry.key}]], 'more')">더 보기
+                            <span class="count" th:text="${entry.value.size() > 3 ? entry.value.size() - 3 : 0}">0</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+            <script src="/js/cs/faq.js"></script>
+        </article>
+    </section>
+</div>

@@ -1,0 +1,204 @@
+/* 기본 스타일 설정 */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;
+    color: #333;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+}
+
+/* 전체 컨텐츠 스타일 */
+.content {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* 헤더 및 섹션 제목 */
+.content_header h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.content_header p {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* 검색 바 */
+.search_bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.search_bar select {
+    height: 40px;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    padding: 0 10px;
+}
+
+.searchInput {
+    width: 250px;
+    height: 40px;
+    padding: 0 15px;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.searchBtn {
+    height: 40px;
+    padding: 0 20px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.searchBtn:hover {
+    background-color: #2980b9;
+}
+
+/* 상품 테이블 */
+.admingraph {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    margin-top: 20px;
+}
+
+.admingraph th {
+    padding: 12px 8px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+    font-size: 14px;
+}
+.admingraph td {
+    padding: 5px 5px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+    font-size: 14px;
+}
+
+.admin_title th {
+    background-color: #f5f6fa;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.admin_list td {
+    vertical-align: middle;
+    color: #333;
+}
+
+.admin_list img.thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* 관리 버튼 스타일 */
+.cs_delete-btn,
+.cs_modify-btn {
+    font-size: 13px;
+    color: #e74c3c;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 8px;
+}
+
+.cs_modify-btn {
+    color: #3498db;
+}
+
+.cs_delete-btn:hover {
+    color: #c0392b;
+}
+
+.cs_modify-btn:hover {
+    color: #2980b9;
+}
+
+/* 삭제 및 등록 버튼 */
+.delete_btn,
+.registration_btn {
+    display: inline-block;
+    width: 120px;
+    height: 40px;
+    line-height: 38px;
+    text-align: center;
+    color: #ffffff;
+    border-radius: 4px;
+    margin-top: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete_btn {
+    background-color: #e74c3c;
+    margin-right: 10px;
+}
+
+.delete_btn:hover {
+    background-color: #c0392b;
+}
+
+.registration_btn {
+    background-color: #3498db;
+    float: right;
+}
+
+.registration_btn:hover {
+    background-color: #2980b9;
+}
+
+/* 페이징 스타일 */
+.pagingBox {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.pagingList > a {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    margin: 0 5px;
+    border-radius: 50%;
+    color: #7f8c8d;
+    background-color: #ecf0f1;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagingList > a.active {
+    color: #ffffff;
+    background-color: #3498db;
+}
+
+.pagingList > a:hover {
+    background-color: #3498db;
+    color: #ffffff;
+}

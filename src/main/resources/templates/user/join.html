@@ -1,0 +1,51 @@
+<!--날짜 : 2024/10/25-->
+<!--이름 : 강유정(최초 작성자)-->
+<!--내용 : 회원가입 html 생성-->
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn 회원가입</title>
+    <link rel="stylesheet" href="/css/include/header.css">
+    <link rel="stylesheet" href="/css/include/footer.css">
+    <link rel="stylesheet" href="/css/user/user_style.css">
+</head>
+
+<body>
+
+<header th:replace="~{layout/header::header}"></header>
+
+<div class="main-join">
+    <div class="container-join">
+        <p class="title-join">대한민국 1등 온라인 인터넷 쇼핑</p>
+        <h3 class="wel-join"><strong>롯데 ON</strong> 에 오신 것을 환영합니다.</h3>
+
+        <div class="membership-productOptions">
+            <div class="productOption-join">
+                <div class="header red-bg">일반회원가입</div>
+                <div class="content-join">
+                    <p>개인구매회원 (외국인포함)</p>
+                    <p><span class="gray-text">만 14세 이상 가능</span></p>
+                    <a th:href="@{/user/signup/user}" class="btn gray-btn">회원가입</a>
+                </div>
+            </div>
+            <div class="productOption-join">
+                <div class="header blue-bg">판매회원가입</div>
+                <div class="content-join">
+                    <p>사업자판매회원</p>
+                    <p><span class="gray-text">사업자등록증을 보유한 회원</span></p>
+                    <a th:href="@{/user/signup/seller}" class="btn gray-btn">회원가입</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <!-- 푸터영역 -->
+    <footer th:replace="~{layout/footer::footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/adminlayout}">
+<head>
+    <!-- index.html 고유 CSS 추가 -->
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" th:href="@{/css/admin/config/banner.css}" />
+        <link rel="stylesheet" th:href="@{/css/admin/config/list.css}" />
+        <link rel="stylesheet" th:href="@{/css/my/modal.css}" />
+    </th:block>
+    <!-- index.html 고유 스크립트 추가 -->
+    <th:block layout:fragment="script">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/modal/modal.js}"></script>
+        <script type="text/javascript" th:src="@{/js/admin/banner/banner.js}"></script>
+    </th:block>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <div th:replace="admin/include/admin_modal :: #bannerModal"></div>
+    <div class="dashboard">
+        <div class="content_header">
+            <h1>배너관리</h1>
+            <p>
+                HOME > 환경설정 > <strong>배너관리</strong>
+            </p>
+        </div>
+
+        <div class="bannerinsertbtn">
+            <button class="Main">메인 상단 베너</button>
+            <button class="Silder">메인 슬라이더 배너</button>
+            <button class="Product">상품 상세보기 배너</button>
+            <button class="Login">회원로그인 배너</button>
+            <button class="Mypage">마이페이지 배너</button>
+        </div>
+
+        <section class="sectionBox">
+            <div>
+                <h3 class="banner_title">메인 상단배너</h3>
+            </div>
+
+            <table class="admingraph">
+                <tr class="admin_title">
+                    <th><input type="checkbox" onclick="toggleSelectAll(this)" /></th>
+                    <th>번호</th>
+                    <th>이미지</th>
+                    <th>배너정보</th>
+                    <th>배너위치</th>
+                    <th>시작일</th>
+                    <th>종료일</th>
+                    <th>시작시간</th>
+                    <th>종료시간</th>
+                    <th>관리</th>
+                </tr>
+                <tbody class="admin_list">
+                <!-- 배너 출력 내용 -->
+                </tbody>
+                <tfoot>
+                </tfoot>
+
+            </table>
+            <a class="delete_btn" onclick="deleteSelectedBanners()">선택삭제</a>
+            <!-- 모달 버튼 출력 -->
+
+            <a href="#" data-modal="bannerModal" class="registration_btn">배너등록</a>
+
+            <div class="pagingBox">
+                <div class="pagingList">
+                    <!-- 이전 버튼 -->
+                    <a href="#" class="prev" id="prevBtn"><</a>
+
+                    <!-- 페이지 링크는 JavaScript에서 동적으로 생성 -->
+                    <span id="pageNumbers"></span>
+
+                    <!-- 다음 버튼 -->
+                    <a href="#" class="next" id="nextBtn">></a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</html>

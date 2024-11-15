@@ -1,0 +1,56 @@
+<div class="faq" th:fragment="view">
+
+  <!--
+    날짜 : 2024/10/18
+    이름 : 최준혁
+    내용 : 고객센터 자주묻는질문 글보기
+
+    수정이력
+    - 2024/10/25 김소희 - 동적처리
+    - 2024/11/04 김소희 - 유형처리
+  -->
+  
+  <nav>
+    <div>
+      <p>홈<span>></span>자주묻는질문</p>
+    </div>
+  </nav>
+  <section class="view">
+    <aside class="cs_sidebar">
+      <h2>자주묻는질문</h2>
+      <ul>
+        <li><a th:href="@{/cs/layout/faq/list?type1=회원}" th:classappend="${type1 == '회원'} ? 'active'">회원</a></li>
+        <li><a th:href="@{/cs/layout/faq/list?type1=쿠폰/이벤트}" th:classappend="${type1 == '쿠폰/이벤트'} ? 'active'">쿠폰 / 이벤트</a></li>
+        <li><a th:href="@{/cs/layout/faq/list?type1=주문/결제}" th:classappend="${type1 == '주문/결제'} ? 'active'">주문 / 결제</a></li>
+        <li><a th:href="@{/cs/layout/faq/list?type1=배송}" th:classappend="${type1 == '배송'} ? 'active'">배송</a></li>
+        <li><a th:href="@{/cs/layout/faq/list?type1=취소/반품/환불}" th:classappend="${type1 == '취소/반품/환불'} ? 'active'">취소 / 반품 / 환불</a></li>
+        <li><a th:href="@{/cs/layout/faq/list?type1=여행/숙박/항공}" th:classappend="${type1 == '여행/숙박/항공'} ? 'active'">여행 / 숙박 / 항공</a></li>
+        <li><a th:href="@{/cs/layout/faq/list?type1=안전결제}" th:classappend="${type1 == '안전결제'} ? 'active'">안전결제</a></li>
+      </ul>
+    </aside>
+
+    <article class="faq_article_view">
+      <nav>
+        <h1 th:text="${faq.type1}">카테고리 이름</h1>
+        <h2 th:text="${faq.type1} + ' 관련 자주 묻는 질문입니다.'">카테고리 설명</h2>
+      </nav>
+      <nav>
+        <h2 class="faq_view_title"><span>Q.</span> <span th:text="${faq.title}">제목</span></h2> <!-- 질문 제목 -->
+      </nav>
+
+      <div class="content">
+        <p th:text="${faq.content}">내용</p><br>
+        <p>
+          ※ 피싱 관련 피해신고<br /><br />
+          ▶ 경찰청 사이버수사국 (국번없이)182 :
+          <a href="http://cyberbureau.police.go.kr" target="_blank">http://cyberbureau.police.go.kr</a><br />
+          ▶ KISA 인터넷침해대응센터 (국번없이)118 :
+          <a href="http://www.krcert.or.kr" target="_blank">http://www.krcert.or.kr</a><br />
+          감사합니다.<br />
+        </p>
+      </div>
+      <a th:href="@{|/cs/layout/faq/list?type1=${faq.type1}|}" class="btnList">목록</a>
+      <script src="/js/cs/faq.js"></script>
+    </article>
+  </section>
+</div>

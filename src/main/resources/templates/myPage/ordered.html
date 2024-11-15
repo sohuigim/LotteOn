@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{myPage/layout/mypage_layout2}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/my/ordered.css}"/>
+    <link rel="stylesheet" th:href="@{/css/my/modal.css}">
+</th:block>
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/modal/modal.js}"></script>
+    <script type="text/javascript" th:src="@{/js/my/myserarch.js}"></script>
+</th:block>
+
+<!-- 회원정보 섹션 -->
+    <section class="content" layout:fragment="content">
+        <div th:replace="layout/modal :: #orderDetailModal"></div>
+        <div th:replace="layout/modal :: #sellerInfoModal"></div>
+        <div th:replace="layout/modal :: #inquiryModal"></div>
+        <div th:replace="layout/modal :: #receiptConfirmModal"></div>
+        <div th:replace="layout/modal :: #reviewModal"></div>
+        <div th:replace="layout/modal :: #refundModal"></div>
+        <div th:replace="layout/modal :: #returnModal"></div>
+        <a href="#"><img src="/images/my/my_banner_sample.png" alt="롯데ON에서 드리는 다양한 결제혜택" class="banner"></a>
+        <!-- 810x86 배너 이미지 -->
+        <article class="latest">
+            <h3>전체주문내역</h3>
+            <!-- 주문내역 검색바 -->
+            <div class="myinfoSearch">
+                <p>기간별 조회</p>
+                <button class="period-btn" id="allButton" data-period="all">전체</button>
+                <button class="period-btn" data-period="week">일주일</button>
+                <button class="period-btn" data-period="halfmonth">15일</button>
+                <button class="period-btn" data-period="month">1개월</button>
+
+                <div class="date-wrapper">
+                    <div class="start-date-wrapper">
+                        시작날짜 : <input type="date" id="startDate" class="start-date" placeholder="시작 날짜 선택">
+                    </div>
+
+                    <div class="end-date-wrapper">
+                        종료날짜 : <input type="date" id="endDate" class="end-date" placeholder="종료 날짜 선택">
+                    </div>
+                </div>
+                <button onclick="searchRecords('/myPage/ordered')">검색</button>
+            </div>
+
+            <table border="0" class="widthtable">
+                <tr>
+                    <th>날짜</th>
+                    <th></th>
+                    <th>상품정보</th>
+                    <th>상태</th>
+                    <th>확인/신청</th>
+                </tr>
+                <block>
+                    <!-- myorder 리스트가 비어있을 경우 -->
+                    <tr th:if="${myOrderItems == null or myOrderItems.dtoList == 0}">
+                        <td colspan="5" class="td_first" style="width: 100%">최근 주문 내역이 없습니다.</td>
+                    </tr>
+                    <tr th:each="myOrderItem : ${myOrderItems.dtoList}"
+                        th:data-product-id="${myOrderItem.product.id}"
+                        th:data-product-name="${myOrderItem.product.productName}"
+                        th:data-order-status="${myOrderItem.getDeliveryStatus().name()}">
+
+                        <td class="date" th:text="${#temporals.format(myOrderItem.getOrder().getOrderDate(), 'yyyy-MM-dd')}">2022-12-13</td>
+
+                        <td>
+                            <a href="#" class="recentproductorderimg">
+                                <img th:src="'/'+${myOrderItem.getProduct().getProductImg1()}" alt="상품이미지">
+                            </a>
+                        </td>
+                        <td class="order-info">
+                            <div class="order-number">
+                                주문번호: <a href="#" th:text="${myOrderItem.getOrder().getId()}" data-modal="orderDetailModal"></a>
+                            </div>
+                            <div class="company-name" th:text="${myOrderItem.getProduct().getShop().getShopName()}" data-modal="sellerInfoModal">실바니안패밀리</div>
+                            <div class="product-name" th:text="${myOrderItem.getProduct().getProductName()}">플로라 토끼 남매의 꽃 가꾸기</div>
+                            <div>수량 : <span th:text="${myOrderItem.getQuantity()}">1 개</span></div>
+                            <div class="product-price" style="font-size: 18px; font-weight: bold;" th:text="${myOrderItem.getOrder().getTotalPrice()}">25,900원</div>
+                        </td>
+
+                        <td class="status" th:text="${myOrderItem.getDeliveryStatus().getKoreanLabel()}"></td>
+                        <td>
+                            <!-- 수취확인 -->
+                            <button id="receive" class="receivebutton"
+                                    th:data-order-status="${myOrderItem.getDeliveryStatus()}"
+                                    th:data-order-item-id="${myOrderItem.getId()}">
+                                수취확인
+                            </button><br>
+                            <button id="review" class="receivebutton" data-modal="reviewModal">상품평쓰기</button><br>
+                            <button id="refund" class="reviewbutton"
+                                    th:data-order-item-id="${myOrderItem.getId()}"
+                                    th:data-product-img="'/'+ ${myOrderItem.getProduct().getProductImg1()}"
+                                    th:data-order-date="${myOrderItem.getOrder().getOrderDate()}"
+                                    th:data-order-number="${myOrderItem.getOrder().getId()}"
+                                    th:data-shop-name="${myOrderItem.getProduct().getShop().getShopName()}"
+                                    th:data-product-name="${myOrderItem.getProductName()}"
+                                    th:data-quantity="${myOrderItem.getQuantity()}"
+                                    th:data-total-price="${myOrderItem.getOrderPrice()}"
+                                    th:data-status="${myOrderItem.getDeliveryStatus().getKoreanLabel()}"
+                                    onclick="openRefundModal(this)">
+                                반품신청
+                            </button><br>
+                            <button id="exchange" class="reviewbutton"
+                                    th:data-order-item-id="${myOrderItem.getId()}"
+                                    th:data-product-img="'/'+ ${myOrderItem.getProduct().getProductImg1()}"
+                                    th:data-order-date="${myOrderItem.getOrder().getOrderDate()}"
+                                    th:data-order-number="${myOrderItem.getOrder().getId()}"
+                                    th:data-shop-name="${myOrderItem.getProduct().getShop().getShopName()}"
+                                    th:data-product-name="${myOrderItem.getProductName()}"
+                                    th:data-quantity="${myOrderItem.getQuantity()}"
+                                    th:data-total-price="${myOrderItem.getOrderPrice()}"
+                                    th:data-status="${myOrderItem.getDeliveryStatus().getKoreanLabel()}"
+                                    onclick="openReturnModal(this)">
+                                교환신청</button>
+                        </td>
+                    </tr>
+                </block>
+            </table>
+        </article>
+
+        <div class="pagingBox">
+            <div class="pagingList">
+                <!-- 이전 버튼 -->
+                <th:block th:if="${myOrderItems.prev}">
+                    <a th:href="@{/myPage/ordered(pg=${myOrderItems.pg - 1}, startDate=${myOrderItems.startDate}, endDate=${myOrderItems.endDate})}" class="prev">←</a>
+                </th:block>
+
+                <!-- 페이지 링크 -->
+                <th:block th:each="num : ${#numbers.sequence(myOrderItems.start, myOrderItems.end)}">
+                    <a th:href="@{/myPage/ordered(pg=${num})}" th:text="${num}"
+                       th:classappend="${myOrderItems.pg == num} ? 'active'"></a>
+                </th:block>
+
+                <!-- 다음 버튼 -->
+                <th:block th:if="${myOrderItems.next}">
+                    <a th:href="@{/myPage/ordered(pg=${myOrderItems.pg + 1}, startDate=${myOrderItems.startDate}, endDate=${myOrderItems.endDate})}" class="next">→</a>
+                </th:block>
+            </div>
+        </div>
+    </section>
+</html>

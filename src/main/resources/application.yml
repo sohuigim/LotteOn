@@ -1,0 +1,38 @@
+app:
+    version: '1조 - 1.0.0-RELEASE'
+
+spring:
+    application:
+        name: lotteon
+    jpa:
+        properties:
+            hibernate:
+                default_batch_fetch_size: 100
+    profiles:
+        active: dev
+        include: local
+    thymeleaf:
+        cache: false
+        prefix: classpath:/templates/
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: dlehdud224@gmail.com
+        password: xjoo ebnq ppso nxst
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+    servlet:
+        multipart:
+            enabled: true
+            max-file-size: 30MB
+            max-request-size: 30MB
+#    2024/11/05 자동로그인(이도영)
+    security:
+        remember-me:
+            key: "1234Asd@"
+    jackson:
+        time-zone: Asia/Seoul

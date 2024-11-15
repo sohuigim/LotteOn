@@ -1,0 +1,135 @@
+<!--
+    날짜 : 2024/10/25
+    이름 : 강유정(최초 작성자)
+    내용 : 로그인 html 생성
+    수정사항
+    - 2024/11/04 이도영 아이디 비밀번호 찾기 경로 추가
+    - 2024/11/05 이도영 자동로그인 기능 추가
+-->
+
+<!DOCTYPE html>
+<html lang="ko" style="--actual-width: 1536px;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn 로그인</title>
+    <link rel="stylesheet" th:href="@{/css/user/user_style.css}">
+    <script type="text/javascript">
+        window.onload = function () {
+            // URL에서 쿼리 파라미터 가져오기
+            const params = new URLSearchParams(window.location.search);
+            const alertMessage = params.get('message');
+
+            if (alertMessage) {
+                alert(decodeURIComponent(alertMessage));
+
+                // 쿼리 파라미터를 제거한 새 URL로 브라우저 상태를 업데이트
+                const url = new URL(window.location);
+                url.searchParams.delete('message');
+                window.history.replaceState({}, document.title, url);
+            }
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            const bannerContainer = document.getElementById('loginBanner');
+            let currentBannerIndex = 0;
+
+            // API로 로그인 배너 데이터를 가져오기
+            fetch('/api/banner/login')
+                .then(response => response.json())
+                .then(banners => {
+                    if (banners.length > 0) {
+                        // 첫 번째 배너로 설정
+                        updateBanner(banners[currentBannerIndex]);
+
+                        // 배너가 여러 개일 경우 슬라이더 기능 추가
+                        if (banners.length > 1) {
+                            setInterval(() => {
+                                currentBannerIndex = (currentBannerIndex + 1) % banners.length;
+                                updateBanner(banners[currentBannerIndex]);
+                            }, 4000); // 4초마다 변경
+                        }
+                    } else {
+                        console.warn('배너 데이터가 없습니다.');
+                    }
+                })
+                .catch(error => console.error('배너 데이터를 가져오는 중 오류 발생:', error));
+
+            // 배너를 업데이트하는 함수
+            function updateBanner(banner) {
+                bannerContainer.innerHTML = `
+            <a href="${banner.backgroundLink || '#'}">
+                <img class="login-right__img" src="${banner.img}" alt="${banner.name}">
+            </a>
+        `;
+            }
+        });
+
+    </script>
+</head>
+
+<!-- 세션 메시지를 보관할 숨겨진 div -->
+<header th:replace="~{layout/header::header}"></header>
+
+<main id="content" role="main" class="contentArea on">
+    <div class="loginContent withAd vertical">
+        <div class="loginWrap lotteOn">
+            <h2 class="titLogin">
+                <span class="tit">로그인</span>
+            </h2>
+            <hr class="line" size="2px" color="black">
+            <div class="loginFormWrapper">
+                <div class="login-left">
+                    <form th:action="@{/user/logincheck}" method="post">
+                        <div class="section_input_loginForm">
+                            <div class="inputSet">
+                                <input name="uid" type="text" placeholder="아이디" id="inId" title="아이디 또는 이메일 입력">
+                                <input id="pass" type="password" placeholder="비밀번호"
+                                       name="pass" autocomplete="new-password"
+                                       title="비밀번호 입력 (8~15자리 영문+숫자+특수문자 조합)">
+                            </div>
+
+                            <!-- 로그인 버튼을 form 안으로 이동 -->
+                            <button type="submit" class="loginButtonWithImage">
+                                <span class="btnLogin">로그인</span>
+                            </button>
+                        </div>
+                        <div class="userinfoservice">
+                            <div>
+                                <input id="checkbox1" type="checkbox" name="remember-me" checked="checked">자동로그인
+                            </div>
+                            <div>
+                                <a th:href="@{/user/findId}" class="findIdPassword">아이디 찾기</a> |
+                                <a th:href="@{/user/findPass}" class="findIdPassword">비밀번호 찾기</a> |
+                                <a th:href="@{/user/join}" class="movejoin">회원가입</a>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                    <div class="socialSignupWrap">
+                        <button type="button" class="naverLoginBtn">네이버</button>
+                        <button type="button" class="kakaoLoginBtn">카카오</button>
+                        <button type="button" class="googleLoginBtn">구글</button>
+                    </div>
+
+                </div>
+                <div class="login-right" id="loginBanner">
+                    <img class="login-right__img" src="/images/member/login_ad.jpg" alt="샘플광고">
+                </div>
+
+            </div>
+            <div class="awards-container">
+                <img src="https://png.pngtree.com/png-clipart/20191121/original/pngtree-awards-ceremony-golden-wheat-ear-logo-png-image_5137378.jpg" alt="awards img" />
+                <img src="https://png.pngtree.com/png-clipart/20191121/original/pngtree-awards-ceremony-golden-wheat-ear-logo-png-image_5137378.jpg" alt="awards img" />
+                <img src="https://png.pngtree.com/png-clipart/20191121/original/pngtree-awards-ceremony-golden-wheat-ear-logo-png-image_5137378.jpg" alt="awards img" />
+                <img src="https://png.pngtree.com/png-clipart/20191121/original/pngtree-awards-ceremony-golden-wheat-ear-logo-png-image_5137378.jpg" alt="awards img" />
+            </div>
+        </div>
+
+    </div>
+</main>
+<footer th:replace="~{layout/footer::footer}"></footer>
+</body>
+</html>

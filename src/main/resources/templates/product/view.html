@@ -1,0 +1,712 @@
+<!--
+    날짜 : 2024/10/25
+    이름 : 이상훈
+    내용 : 상품 페이지 리스트 보기 컨텐츠 생성
+
+    - 수정내역
+    - tymeleaf 레이아웃 적용 (10/28 준혁)
+    - 쿠폰 다운로드 모달 적용 (11/03 도영)
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{product/layout/product_layout}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/include/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/product/product.css}">
+    <link rel="stylesheet" th:href="@{/css/product/view.css}">
+    <link rel="stylesheet" th:href="@{/css/my/modal.css}">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/modal/modal.js}"></script>
+    <script type="text/javascript" th:src="@{/js/util.js}"></script>
+    <script type="text/javascript" th:src="@{/js/product/view.js}"></script>
+
+    <script src="https://kit.fontawesome.com/63c07008cd.js" crossorigin="anonymous"></script>
+</th:block>
+
+<section class="section" layout:fragment="content">
+    <div th:if="${coupondatas}" th:replace="~{layout/modal :: #couponinfoModal}"></div>
+    <nav class="section__nav navsticky">
+        <h1>상품보기</h1>
+        <p>
+            HOME
+            <span> > </span>
+            <span>패션·의류·뷰티</span>
+            <span> > </span>
+            <strong>남성의류</strong>
+        </p>
+    </nav>
+
+    <!-- 상품 전체 정보 내용 -->
+    <article class="info">
+
+        <div class="image">
+            <img th:src="'/'+${product.productImg2}" alt="상품이미지"/>
+        </div>
+        <div class="summary">
+            <nav class="summary__nav">
+                <h1 class="summary__nav__company">(주)상호명</h1>
+                <h2 class="summary__nav__product">상품번호&nbsp;:&nbsp;<span id="prodNo">[[${product.id}]]</span></h2>
+            </nav>
+
+            <!-- 상품명과 별점 -->
+            <nav class="summary__product">
+                <div class="product-header">
+                    <h3>[[${product.productName}]]</h3>
+                    <div class="rating">
+                        <img src="https://static.lotteon.com/p/product/assets/img/icon_seller_star_black.svg" alt="별점"/>
+                        <span th:text="${reviewAvgRating}">4.8</span> <span th:text="|( ${reviewCount} )|">(27건)</span>
+                    </div>
+                </div>
+                <p class="summary__product-info">[[${product.description}]]</p>
+            </nav>
+
+            <!-- 가격과 혜택 -->
+            <h4 class="section-title">가격 정보</h4>
+            <nav class="summary__price">
+                <div class="price-group">
+                    <div class="original-price">
+                        <del id="prodPrice" class="org_price">[[${product.price}]]원</del>
+                        <span id="disCount" class="discount">[[${product.discountRate}]]%↓</span>
+                    </div>
+                    <ins id="disPrice" class="dis_price">[[${product.discountedPrice}]] 원</ins> <!-- 최종 가격 -->
+                </div>
+                <button th:if="${coupondatas}" class="coupon-button" data-modal="couponinfoModal"><i
+                        class="fa-solid fa-tag"></i> 쿠폰 받기
+                </button>
+            </nav>
+
+            <h4 class="section-title">혜택 정보</h4>
+            <div class="summary__card">
+                <span class="card cardFree"><i class="fa-solid fa-credit-card"></i>무이자할부</span>
+                <span class="card cardAdd"><i class="fa-solid fa-credit-card"></i>카드추가혜택</span>
+            </div>
+
+
+            <!-- 배송 정보 -->
+            <h4 class="section-title">배송 정보</h4>
+            <nav class="summary__delivery">
+                <div class="delivery-item">
+                    <span class="delivery-label"><i class="fa-solid fa-truck"></i> 배송비:</span>
+                    <span class="delivery">[[${product.deliveryFee}]]원</span>
+                </div>
+                <div class="delivery-item">
+                    <span class="delivery-label"><i class="fa-solid fa-calendar-day"></i> 도착 예정:</span>
+                    <span class="arrival" id="arrivalDate">모레 (금) 7/8 도착예정</span>
+                </div>
+                <div class="desc">본 상품은 국내배송만 가능합니다.</div>
+            </nav>
+
+            <!-- 선택 옵션 추가 -->
+            <th:block th:if="${product.getProductOptions().size()} > 0">
+                <h4 class="section-title">선택 옵션</h4>
+            </th:block>
+            <div class="selectedOption">
+                <th:block th:each="ProductOption, i:${product.getProductOptions()}">
+                    <div class="options_choose">
+                        <label for="optionSelect[[${i}]]">[[${ProductOption.name}]]:</label>
+                        <select id="optionSelect[[${i}]]" onchange="updateSelectedOptions()">
+                            <option value="">옵션을 선택하세요</option>
+                            <th:block th:each="optionitem : ${ProductOption.getOptionitems()}">
+                                <option th:value="${optionitem.id}">[[${optionitem.value}]]</option>
+                            </th:block>
+                        </select>
+                    </div>
+                </th:block>
+            </div>
+
+            <!-- 수량 선택 -->
+            <h4 class="section-title">수량 선택</h4>
+            <div class="selectedValue">
+                <div class="count">
+                    <button class="count-button decrease" onclick="changeNumNoOpt(-1)">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <!-- oninput 이벤트를 통해 키보드 입력 시 checkMaxStock 함수 호출 -->
+                    <input class="count__input" type="number" min="1" name="num" id="numInput" value="1"
+                           oninput="updateTotalPrice();"/>
+                    <button class="count-button increase" onclick="changeNumNoOpt(1)">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- 배너 영역 -->
+            <section class="slider" style="height: 100px;">
+                <div class="totalImageBox"></div> <!-- 이미지가 동적으로 여기에 추가됩니다 -->
+                <span class="sliderPrev">&#10096;</span>
+                <span class="sliderNext">&#10097;</span>
+            </section>
+
+            <!-- 총 금액 표시 -->
+            <div class="total">
+                <span class="total__price-name">총 상품금액</span>
+                <span class="total__price-value" id="totalPrice">[[${product.discountedPrice}]]원</span>
+            </div>
+
+            <!-- 장바구니 구매하기 버튼 그룹 -->
+            <div class="button-group">
+                <button onclick="saveOrderInfoToSession()" class="button-group__btn button-group__order">
+                    <i class="fa-solid fa-credit-card"></i> 구매하기
+                </button>
+                <button onclick="addToCart()" class="button-group__btn button-group__cart">
+                    <i class="fa-solid fa-cart-shopping"></i> 장바구니
+                </button>
+            </div>
+
+        </div>
+    </article>
+
+
+    <article class="notice">
+        <!-- 기본 정보 테이블 -->
+        <table class="info-table">
+            <tr>
+                <td>상품번호</td>
+                <td>[[${product.id}]]</td>
+            </tr>
+            <tr>
+                <td>상품상태</td>
+                <td>[[${product.status}]]</td>
+            </tr>
+            <tr>
+                <td>부가세 면세여부</td>
+                <td>[[${product.warranty}]]</td>
+            </tr>
+            <tr>
+                <td>영수증발행</td>
+                <td>[[${product.receiptIssued}]]</td>
+            </tr>
+            <tr>
+                <td>사업자구분</td>
+                <td>[[${product.businessType}]]</td>
+            </tr>
+            <tr>
+                <td>원산지</td>
+                <td>[[${product.origin}]]</td>
+            </tr>
+        </table>
+
+        <!-- 구분선 -->
+        <div class="divider"></div>
+
+        <!-- 상세 정보 테이블 -->
+        <table class="detail-table">
+            <tr th:each="detail : ${product.getProductDetails()}">
+                <td>[[${detail.name}]]</td>
+                <td>[[${detail.value}]]</td>
+            </tr>
+        </table>
+
+        <div class="button-container">
+            <button class="toggle-button" onclick="toggleDetails()">
+                더 많은 상품정보를 확인해보세요
+                <span class="toggle-icon">▼</span>
+            </button>
+        </div>
+    </article>
+
+    <section class="bottom_section">
+        <!-- 왼쪽 상품 정보와 상세 이미지 -->
+        <div class="product-content">
+            <div class="product-info">
+                <!-- 상단 네비게이션 바 -->
+                <nav class="product-nav">
+                    <button class="nav-btn" onclick="scrollToSection('detail')">상세정보</button>
+                    <button class="nav-btn" onclick="scrollToSection('review')">리뷰</button>
+                    <button class="nav-btn" onclick="scrollToSection('qna')">Q&A</button>
+                    <button class="nav-btn" onclick="scrollToSection('return')">교환반품안내</button>
+                </nav>
+
+                <!-- 상품정보 및 이미지 -->
+                <div id="detail">
+                    <h1>상품정보</h1>
+                    <img class="section__product-img"
+                         th:src="'/'+${product.productImg3}" alt="상품이미지"/>
+                </div>
+            </div>
+
+            <aside class="cart-summary">
+                <div class="bottom_cart">
+                    <div class="cart-option">
+                        <label for="optionSelect1">상품명</label>
+                        <label for="optionSelect1">[[${product.productName}]]</label>
+
+                        <label for="optionSelect2">선택옵션</label>
+                        <div class="selectedOption">
+                            <th:block th:each="ProductOption, i:${product.getProductOptions()}">
+                                <div class="options_choose">
+                                    <label for="optionSelect[[${i}]]">[[${ProductOption.name}]]:</label>
+                                    <select id="optionSelect[[${i}]]" onchange="updateSelectedOptions()">
+                                        <option value="">옵션을 선택하세요</option>
+                                        <th:block th:each="optionitem : ${ProductOption.getOptionitems()}">
+                                            <option th:value="${optionitem.id}">[[${optionitem.value}]]</option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+
+                    <div class="cart-info">
+                        <p><strong>배송 정보:</strong> 10/30 (수) 도착 예정 (87% 확률)</p>
+                        <p><strong>판매자:</strong> 에이블로우컴퍼니</p>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="quantity">
+                            <label for="count-input">수량</label>
+                            <div class="quantity-controls">
+                                <button class="count-btn decrease">-</button>
+                                <input type="text" id="count-input" value="1" class="count-input">
+                                <button class="count-btn increase">+</button>
+                            </div>
+                        </div>
+                        <div class="price">
+                            <strong>가격:</strong> <span class="price-value">10,170원</span>
+                        </div>
+                    </div>
+
+                    <div class="cart-actions">
+                        <button class="cart-action-btn cart-btn"><i class="fa-solid fa-shopping-cart"></i> 장바구니 담기
+                        </button>
+                        <button class="cart-action-btn buy-btn"><i class="fa-solid fa-credit-card"></i> 바로 구매하기</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- 상품 리뷰 내용 -->
+    <nav id="review-title" class="section__review-nav">
+        <strong>리뷰</strong>
+        <span th:text="|( ${reviewCount} )|">( 3 )</span>
+    </nav>
+    <div class="coresArea">
+        <div class="cores">
+            <div class="staring">
+                <span class="star">
+                    <strong style="width:94%" th:style="|width: ${reviewAvgRating*100/5}%|"></strong>
+                    <span class="blind">평점</span>
+                </span>
+                <div class="score">
+                    <em th:text="${reviewAvgRating}">4.7</em>
+                    <span class="total" style="margin-top:0">/5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <article class="review">
+        <div class="review__head" th:text="|총${reviewCount}|">총3건</div>
+        <div class="review__list">
+            <div class="review__item" th:each="review : ${reviews.content}">
+                <div class="review__item__header">
+                    <div class="review__item__header__profile">
+                        <figure class="review__item__header__profile__img">
+                            <span class="blind">유저 썸네일 이미지</span>
+                        </figure>
+                        <strong class="review__item__header__profile__userName" th:text="${review.memberId}">je06****</strong>
+                    </div>
+                </div>
+                <div class="review__item__star">
+                    <span class="review__item__star__background">
+                        <strong style="width: 90%;" th:style="|width: ${review.score*100/5}%|"></strong>
+                    </span>
+                    <span class="blind">평점</span>
+                    <em th:text="${review.score}">4.5</em>
+                </div>
+                <div class="review__item__option-seller">
+<!--                    <div class="review__item__option-seller__option">옵션: 사계절 아삭 포기김치 10kg</div>-->
+                    <div class="review__item__option-seller__seller" th:text="|판매자 : ${review.sellerName}|">판매자 : (주)다호디앤아이</div>
+                </div>
+                <div class="review__item__desc" th:text="${review.content}">리뷰 내용입니다. 이곳에 리뷰 내용을 적어주세요.</div>
+                <span class="review__item__date" th:text="${#temporals.format(review.createdAt, 'yyyy.MM.dd')}">2024.01.01</span>
+            </div>
+        </div>
+    </article>
+    <!-- 페이지네이션 -->
+    <div class="pagingBox">
+        <div class="pagingList">
+            <!-- 이전 버튼 -->
+            <a th:if="${reviews.currentPage > 0}"
+               th:href="@{/product/view/{id}(id=${product.id}, page=${reviews.currentPage - 1})}"
+               class="prev">&lt;</a>
+
+            <!-- 페이지 번호 -->
+            <a th:each="i : ${#numbers.sequence(startPage, endPage)}"
+               th:href="@{/product/view/{id}(id=${product.id}, page=${i - 1})}"
+               th:text="${i}"
+               th:classappend="${reviews.currentPage + 1 == i} ? 'active' : ''">1</a>
+
+            <!-- 다음 버튼 -->
+            <a th:if="${reviews.currentPage + 1 < reviews.totalPages}"
+               th:href="@{/product/view/{id}(id=${product.id}, page=${reviews.currentPage + 1})}"
+               class="next">&gt;</a>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            let optionCombinations = /*[[${optionCombinations}]]*/ {};
+            let selectedOptions = {}; // 사용자가 선택한 옵션을 저장하는 객체
+            let unitPrice = parseFloat(document.getElementById("disPrice").textContent.replace(/[^0-9.-]+/g, "")); // 할인된 가격
+            let productOptionsCount = /*[[${#lists.size(product.getProductOptions())}]]*/ 0; // 옵션사이즈
+            let defaultStock = /*[[${defaultStock}]]*/ 0; // 기본 재고 수량 추가
+
+            console.log("옵션 조합 데이터:", optionCombinations);
+            console.log("현재 선택된 옵션:", selectedOptions); // 객체 자체를 단독으로 출력
+            console.log("현재 선택된 옵션(JSON):", JSON.stringify(selectedOptions, null, 2)); // JSON 형태로 보기 좋게 출력
+
+            // 옵션 선택 변경 시 호출
+            function updateSelectedOptions() {
+                let optionsChanged = false;
+
+                document.querySelectorAll('.options_choose select').forEach((select) => {
+                    const optionName = select.previousElementSibling.textContent.replace(":", "").trim();
+                    const optionValue = select.value ? parseInt(select.value, 10) : null;
+
+                    if (optionValue !== null && !isNaN(optionValue) && selectedOptions[optionName] !== optionValue) {
+                        selectedOptions[optionName] = optionValue;
+                        optionsChanged = true;
+                    } else if (optionValue === null && selectedOptions[optionName]) {
+                        delete selectedOptions[optionName];
+                        optionsChanged = true;
+                    }
+                });
+
+                console.log("현재 선택된 옵션:", selectedOptions);
+
+                if (optionsChanged) {
+                    debounce(checkMaxStock, 200);
+                }
+            }
+
+            // 옵션 모두 체크했는지 검사하는 유효성검사 메서드
+            function areAllOptionsSelected() {
+                if (Object.keys(selectedOptions).length !== productOptionsCount) {
+                    return false;
+                }
+                return Object.values(selectedOptions).every(value => value !== null && !isNaN(value));
+            }
+
+
+            // 선택된 옵션에 맞는 재고 및 combinationId 찾기
+            function getDetailsForSelectedOptions() {
+                const optionKey = JSON.stringify(Object.values(selectedOptions).sort((a, b) => a - b));
+                console.log('확인된 옵션 키:', optionKey);
+
+                // 옵션 조합이 있는지 확인하고 기본값 설정
+                const details = optionCombinations[optionKey];
+                if (!details) {
+                    console.warn("옵션 조합을 찾을 수 없습니다:", optionKey);
+                }
+                return details || {combinationId: null, stock: 0};
+            }
+
+
+            function getStockForSelectedOptions() {
+
+                const details = getDetailsForSelectedOptions();
+                return details.stock;
+            }
+
+
+            let debounceTimer;
+
+            // 함수 호출 빈도 제한
+            function debounce(func, delay) {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(func, delay);
+            }
+
+            // 재고수량 체크
+            function checkMaxStock() {
+                const quantityInput = document.getElementById("numInput");
+                const selectedQuantity = parseInt(quantityInput.value, 10) || 1;
+
+                // 모든 옵션이 선택되지 않은 경우 기본 재고 사용
+                if (!areAllOptionsSelected()) {
+                    quantityInput.value = 1;
+                    quantityInput.disabled = false;
+                    return;
+                }
+
+                // 선택된 옵션의 최대 재고를 가져옴
+                const maxStock = productOptionsCount > 0 ? getStockForSelectedOptions() : defaultStock;
+                console.log("확인된 최대 재고:", maxStock);
+
+                if (maxStock === 0) {
+                    alert("선택한 옵션 조합의 재고가 없습니다.");
+                    quantityInput.value = 0;
+                    quantityInput.disabled = true;
+                } else {
+                    quantityInput.disabled = false;
+                    if (selectedQuantity > maxStock) {
+                        alert(`최대 재고 수량은 ${maxStock}입니다!`);
+                        quantityInput.value = maxStock;
+                    } else if (selectedQuantity < 1) {
+                        quantityInput.value = 1;
+                    }
+                }
+                updateTotalPrice();
+            }
+
+
+            // 총 금액 업데이트 함수
+            function updateTotalPrice() {
+                const quantity = parseInt(document.getElementById("numInput").value, 10) || 1;
+                const totalPrice = unitPrice * quantity;
+                document.getElementById("totalPrice").textContent = totalPrice.toLocaleString() + "원";
+            }
+
+            // 수량 입력 필드 제한 이벤트
+            const quantityInput = document.getElementById("numInput");
+            quantityInput.addEventListener("input", limitQuantityInput);
+            quantityInput.addEventListener("change", limitQuantityInput);
+
+
+            // 최대 재고 가져오기
+            function getMaxStock() {
+                return productOptionsCount > 0 ? getStockForSelectedOptions() : defaultStock;
+            }
+
+            // 버튼 클릭 시 수량 증가/감소 제한
+            function changeNumNoOpt(delta) {
+                const quantityInput = document.getElementById("numInput");
+                let currentQuantity = parseInt(quantityInput.value, 10) || 1;
+                const maxStock = getMaxStock();
+
+                currentQuantity += delta;
+
+                if (currentQuantity > maxStock) {
+                    alert(`최대 재고 수량은 ${maxStock}입니다.`);
+                    quantityInput.value = maxStock;
+                } else if (currentQuantity < 1) {
+                    quantityInput.value = 1;
+                } else {
+                    quantityInput.value = currentQuantity;
+                }
+
+                updateTotalPrice();
+            }
+
+            // 수량을 최대 재고로 제한
+            function limitQuantityInput() {
+                const quantityInput = document.getElementById("numInput");
+                const maxStock = getMaxStock();
+                let currentQuantity = parseInt(quantityInput.value, 10) || 1;
+
+                if (currentQuantity > maxStock) {
+                    alert(`최대 재고 수량은 ${maxStock}입니다.`);
+                    quantityInput.value = maxStock;
+                } else if (currentQuantity < 1) {
+                    quantityInput.value = 1;
+                }
+                updateTotalPrice();
+            }
+
+            function validateBeforeAction() {
+                if (productOptionsCount > 0 && !areAllOptionsSelected()) { // 옵션이 있는 경우만 선택
+                    alert("모든 옵션을 선택해주세요.");
+                    return false;
+                }
+
+                const maxStock = productOptionsCount > 0 ? getStockForSelectedOptions() : defaultStock;
+                const quantityInput = document.getElementById("numInput");
+                const selectedQuantity = parseInt(quantityInput.value, 10) || 1;
+
+                if (selectedQuantity > maxStock) {
+                    alert(`최대 재고 수량은 ${maxStock}입니다.`);
+                    quantityInput.value = maxStock;
+                    return false;
+                }
+
+                return true;
+            }
+
+            // 장바구니 등록
+            function addToCart() {
+                var isAuthenticated = /*[[${isAuthenticated}]]*/ false;
+                var role = /*[[${role}]]*/ false;
+                if (!isAuthenticated) {
+                    var proceedToLogin = confirm("로그인을 해야 구매가 가능합니다. 로그인 페이지로 이동하시겠습니까?");
+
+                    if (proceedToLogin) {
+                        window.location.href = '/user/login';  // "확인"을 누르면 로그인 페이지로 이동
+                    } else {
+                        return;  // "아니요"를 누르면 현재 페이지에 머무름
+                    }
+                }
+                // 역할이 "Seller" 또는 "Admin"인 경우 처리
+                if (role === "Seller" || role === "Admin") {
+                    alert("일반 사용자만 이용 가능한 기능입니다.");
+                    return;
+                }
+                if (!validateBeforeAction()) return;
+
+                const productId = document.getElementById('prodNo').textContent.trim();
+                const quantity = parseInt(document.getElementById('numInput').value, 10) || 1;
+                const totalPrice = document.getElementById("totalPrice").textContent
+                    .replace(/[^\d]/g, '')  // 숫자가 아닌 모든 문자 제거
+                    .trim();
+
+                // 옵션이 있는 상품인지 확인
+                const productOptionsCount = /*[[${#lists.size(product.getProductOptions())}]]*/ 0; // 옵션 개수 (Thymeleaf로 값 주입)
+                let combinationId = null;
+
+                if (productOptionsCount > 0) {
+                    // 옵션이 있는 경우, 조합 ID 가져오기
+                    const details = getDetailsForSelectedOptions();
+                    combinationId = details ? details.combinationId : null;
+
+                    if (!combinationId) {
+                        alert("선택한 옵션 조합에 해당하는 상품이 없습니다.");
+                        return;
+                    }
+                }
+
+                // 장바구니에 추가할 데이터 객체 구성
+                const cartData = {
+                    productId: productId,
+                    quantity: quantity,
+                    totalPrice: totalPrice
+                };
+
+                // 옵션이 있는 상품의 경우 combinationId를 포함
+                if (combinationId) {
+                    cartData.combinationId = combinationId;
+                }
+
+                fetch('/cart/insert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(cartData),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const userChoice = confirm("장바구니 담기에 성공했습니다! 장바구니로 이동할까요?");
+                            if (userChoice) {
+                                window.location.href = '/product/cart';
+                            } else {
+                                window.location.reload();
+                            }
+                        } else {
+                            alert("장바구니 담기에 실패했습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("에러 발생:", error);
+                        alert("장바구니 담기에 실패했습니다.");
+                    });
+            }
+
+            function saveOrderInfoToSession() {
+                var isAuthenticated = /*[[${isAuthenticated}]]*/ false;
+                var role = /*[[${role}]]*/ false;
+                // 인증되지 않은 경우 처리
+                if (!isAuthenticated) {
+                    var proceedToLogin = confirm("로그인을 해야 구매가 가능합니다. 로그인 페이지로 이동하시겠습니까?");
+
+                    if (proceedToLogin) {
+                        window.location.href = '/user/login';  // "확인"을 누르면 로그인 페이지로 이동
+                    } else {
+                        return;  // "아니요"를 누르면 현재 페이지에 머무름
+                    }
+                }
+                // 역할이 "Seller" 또는 "Admin"인 경우 처리
+                if (role === "Seller" || role === "Admin") {
+                    alert("일반 사용자만 이용 가능한 기능입니다.");
+                    return;
+                }
+                if (!validateBeforeAction()) return;
+
+                // 필요한 값을 미리 계산해서 로컬 변수로 저장
+                const discountedPrice = parseFloat(document.getElementById('disPrice').textContent.replace(/[^0-9.-]+/g, ''));
+                const quantity = parseInt(document.getElementById('numInput').value, 10) || 1;
+                const deliveryFee = parseFloat(document.querySelector('.delivery').textContent.replace(/[^0-9.-]+/g, '') || 0);
+                const points = Math.floor(discountedPrice * 0.01);
+                const total = discountedPrice * quantity + deliveryFee;
+                const details = productOptionsCount > 0 ? getDetailsForSelectedOptions() : null;
+                const combinationId = details ? details.combinationId : null; // combinationId가 없으면 null로 설정
+                const originalPrice = parseFloat(document.getElementById('prodPrice').textContent.replace(/[^0-9.-]+/g, ''));
+                const discount = (originalPrice * quantity) - total;
+
+                // orderInfo 객체 초기화
+                const orderInfo = {
+                    productId: document.getElementById('prodNo').textContent.trim(),
+                    productImg: document.querySelector('.image img').src,
+                    productName: document.querySelector('.summary__product h3').textContent.trim(),
+                    productDescription: document.querySelector('.summary__product-info').textContent.trim(),
+                    quantity: quantity,
+                    originalPrice: originalPrice,
+                    discountRate: parseFloat(document.getElementById('disCount').textContent.replace('%↓', '')),
+                    discountedPrice: discount,
+                    points: points,
+                    deliveryFee: deliveryFee,
+                    total: total,
+                    combinationId: combinationId  // combinationId가 없을 때는 null
+                };
+
+                console.log('order인포', orderInfo);
+
+                // 세션에 상품 정보 저장 요청
+                fetch('/api/product/save-order-info', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(orderInfo)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/product/order';
+                        } else {
+                            alert("주문 정보를 저장하는 데 실패했습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("에러 발생:", error);
+                        alert("주문 정보를 저장하는 데 실패했습니다.");
+                    });
+            }
+
+
+            window.updateSelectedOptions = updateSelectedOptions;
+            window.changeNumNoOpt = changeNumNoOpt;
+            window.checkMaxStock = checkMaxStock;
+            window.validateBeforeAction = validateBeforeAction;
+            window.addToCart = addToCart;
+            window.updateTotalPrice = updateTotalPrice;
+            window.saveOrderInfoToSession = saveOrderInfoToSession;
+        });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // 페이지 로드 시 저장된 스크롤 위치 복원
+            const previousScrollY = sessionStorage.getItem("scrollPosition");
+            if (previousScrollY) {
+                window.scrollTo(0, parseInt(previousScrollY, 10));
+                sessionStorage.removeItem("scrollPosition"); // 복원 후 위치 삭제
+            }
+
+            // 페이징 링크 클릭 시 스크롤 위치 저장 및 review-title 위치로 이동 설정
+            document.querySelectorAll(".pagingList a").forEach(pageLink => {
+                pageLink.addEventListener("click", function (event) {
+                    event.preventDefault(); // 기본 링크 동작 중지
+                    sessionStorage.setItem("scrollPosition", document.getElementById("review-title").offsetTop);
+
+                    // 페이지 이동 (링크로 이동)
+                    window.location.href = pageLink.href;
+                });
+            });
+        });
+    </script>
+
+
+</section>
+</html>

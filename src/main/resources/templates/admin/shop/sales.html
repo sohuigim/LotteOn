@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/adminlayout}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/admin/shop/sales.css}" />
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div class="content" layout:fragment="content">
+    <div class="dashboard">
+        <div class="content_header">
+            <h1>매출현황</h1>
+            <p>
+                HOME > 상점관리 > <strong>매출현황</strong>
+            </p>
+        </div>
+
+        <section class="sectionBox">
+            <div>
+                <form action="/admin/shop/sales">
+
+                    <select name="type">
+                        <productOption value="today">일별</productOption>
+                        <productOption value="week">주간</productOption>
+                        <productOption value="month">한달</productOption>
+                    </select>
+
+                </form>
+            </div>
+            <table class="admingraph">
+                <tr class="admin_title">
+                    <th>번호</th>
+                    <th>상호명</th>
+                    <th>사업자등록번호</th>
+                    <th>주문건수</th>
+                    <th>결제완료</th>
+                    <th>배송중</th>
+                    <th>배송완료</th>
+                    <th>구매확정</th>
+                    <th>주문합계</th>
+                    <th>매출합계</th>
+                </tr>
+
+                <tr class="admin_list">
+                    <td>5</td>
+                    <td>(주)합천</td>
+                    <td>112-12-12345</td>
+                    <td>103</td>
+                    <td>90</td>
+                    <td>56</td>
+                    <td>52</td>
+                    <td>50</td>
+                    <td>12,870,600</td>
+                    <td>10,870,600</td>
+                </tr>
+
+            </table>
+
+            <div class="pagingBox">
+                <div class="pagingList">
+                    <!-- 이전 버튼 -->
+                    <a href="#" class="prev"><</a>
+
+                    <!-- 페이지 링크 -->
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+
+                    <!-- 다음 버튼 -->
+                    <a href="#" class="next">></a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</html>

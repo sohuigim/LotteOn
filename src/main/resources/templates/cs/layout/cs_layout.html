@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--
+  날짜 : 2024/10/18
+  이름 : 최준혁
+  내용 : 고객센터 레이아웃
+
+  수정이력
+  - 2024/10/25 김소희 - 연결 변경
+-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" th:href="@{/css/cs/cs.css}" />
+</head>
+<body>
+  <!-- header -->
+  <header th:replace="~{layout/header::header}"></header>
+  <!-- content -->
+  <th:block th:switch="${group}">
+    <th:block th:case="'notice'">
+      <th:block th:with="path='cs/notice/' + ${cate}, fragment=${cate}">
+        <th:block th:replace="~{${path}::${fragment}}"></th:block>
+      </th:block>
+    </th:block>
+
+    <th:block th:case="'faq'">
+      <th:block th:with="path='cs/faq/' + ${cate}, fragment=${cate}">
+        <th:block th:replace="~{${path}::${fragment}}"></th:block>
+      </th:block>
+    </th:block>
+
+    <th:block th:case="'qna'">
+      <th:block th:with="path='cs/qna/' + ${cate}, fragment=${cate}">
+        <th:block  th:replace="~{${path}::${fragment}}"></th:block>
+      </th:block>
+    </th:block>
+  </th:block>
+  <!-- footer -->
+  <footer th:replace="~{layout/footer::footer}"></footer>
+</body>
+</html>

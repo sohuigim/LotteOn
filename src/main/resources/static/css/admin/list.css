@@ -1,0 +1,252 @@
+
+/* 카테고리>카테고리 */
+main > section > nav > p {
+    position: absolute;
+    right: 0;
+    /* bottom: 10px; */
+}
+
+/* 아이콘 색상 */
+#admin_sidebar > li > a > i, 
+#admin_sidebar ol > li > a > i {
+    color: #ecf0f1;
+}
+
+
+/* 서브메뉴에서 hover 시 배경색 변화 */
+#admin_sidebar ol > li:hover {
+    background-color: #3b4f61;
+}
+
+/* 활성화된 서브 메뉴 링크 스타일 */
+#admin_sidebar ol > li > a.active {
+    background-color: #1abc9c; /* 원하는 배경색 */
+    color: #fff; /* 원하는 텍스트 색상 */
+}
+
+/* 페이징 */
+.pagingBox {
+    display: flex;
+    position: relative;
+    margin-top: 40px !important;
+    justify-content: center;
+}
+
+.pagingList>a {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #999;
+    line-height: 26px;
+    margin: 0 2px;
+    text-indent: -1px;
+    font-family: Roboto, NotoSansKR, Malgun Gothic, AppleSDGothicNeo, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.pagingList>a.active {
+    margin: 0 4px;
+    background-color: #343b4d;
+    border: 1px solid #343b4d;
+    color: #fff;
+}
+
+.pagingList>a:hover {
+    background-color: #35373d;
+}
+
+/* 상품검색 */
+input {
+    width: 200px;
+    padding: 9px;
+    border: 1px solid #D8D8D8;
+    font-size: 13px;            
+    background-color: #fefefe;
+    color: #333;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+.select-container {
+    display: flex;
+    gap: 10px; /* 간격을 원하는 만큼 조정 가능 */
+}
+
+select[name="type"] {
+    /* appearance: none; */
+    width: 90px;
+    height: 35px;
+    border: 1px solid #D8D8D8;
+    text-align: center;
+    outline: none;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 6px;
+}
+
+.sectionBox > div {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.admingraph {
+    width: 100%;
+    margin-top: 13px;
+    border-top: 2px solid #8798a3;
+    border-bottom: 2px solid #BFBFBF;
+    background: #fff;
+    text-align: center;
+    box-sizing: border-box;
+    border-collapse: collapse;
+}
+
+.admin_title {
+    height: 65px;
+    border-bottom: 1px solid #BFBFBF;
+}
+
+.admin_list {
+    height: 65px;
+    border-bottom: 1px solid #BFBFBF;
+}
+
+/* 버튼 */
+.searchBtn {
+    width: 45px;
+    background-color: #D8D8D8;
+    color: #FFFFFF;
+}
+
+button[type=submit] {
+    float: right;
+    height: 26px;
+    margin-right: 246px;
+    padding: 0 15px;
+    background-color: #a8b2c5;            
+    border: 1px solid #D8D8D8;
+    font-size: 12px;            
+    color: #fff;            
+    vertical-align: middle;
+}
+
+.product__delete-btn {
+    cursor: pointer;
+    text-decoration: none;
+    color: #ff0000;
+}
+
+/* admin > order > list 배송하기 버튼 */
+.deliveryBtn {
+    color: #0070C0;
+    background-color:  #FFFFFF;
+    border: 1px solid #0070C0;
+    padding: 5px;
+
+}
+
+
+/* 선택삭제, 상품등록 */
+.delete_btn {
+    float: left;
+    width: 100px;
+    height: 37px;
+    padding: 6px;
+    margin-top: 10px;
+    border: 1px solid #D9D9D9;
+    font-size: 13px;
+    text-align: center;
+    background-color: #BFBFBF;
+    color: #FFFFFF;
+    vertical-align: middle;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.registration_btn {
+    float: right;
+    width: 100px;
+    height: 37px;
+    padding: 6px;
+    margin-top: 10px;
+    border: 1px solid #D9D9D9;
+    font-size: 13px;
+    text-align: center;
+    background-color: #8EB4E3;
+    color: #FFFFFF;
+    vertical-align: middle;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+/* 버전관리 #1 */
+.adminp {
+    height: 40px;
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    background-color: #F2F2F2;
+}
+.adminp p {
+    width: 100%; /* p 태그가 가로로 꽉 차도록 설정 */
+    padding-left: 10px; /* 텍스트에 약간의 좌측 padding 추가 */
+}
+
+/* 상점목록 */
+.operate {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* margin-top: -20px !important; */
+    
+}
+
+/* 상점목록 운영*/
+.running {color: green;}
+.stopped {color: red;}
+.preparing {color: blue;}
+
+
+/* 리스트 표 */
+
+/* 상품현황 */
+.admin_product-list > td:nth-child(1) {width: 20px;}
+.admin_product-list > td:nth-child(2) {width: 20px;}
+.admin_product-list > td:nth-child(3) {width: 30px;}
+.admin_product-list > td:nth-child(4) {width: 250px;}
+.admin_product-list > td:nth-child(5) {width: 70px;}
+.admin_product-list > td:nth-child(6) {width: 40px;}
+.admin_product-list > td:nth-child(7) {width: 60px;}
+.admin_product-list > td:nth-child(8) {width: 50px;}
+.admin_product-list > td:nth-child(9) {width: 80px;}
+
+/* 공지사항  */
+.admin_notice-list > td:nth-child(1) {width: 20px;}
+.admin_notice-list > td:nth-child(2) {width: 80px;}
+.admin_notice-list > td:nth-child(3) {width: 80px;}
+.admin_notice-list > td:nth-child(4) {width: auto; text-align: left;}
+.admin_notice-list > td:nth-child(5) {width: 80px;}
+.admin_notice-list > td:nth-child(6) {width: 80px;}
+.admin_notice-list > td:nth-child(7) {width: 80px;}
+
+/* 자주묻는질문 */
+.admin_faq-list > td:nth-child(1) {width: 20px;}
+.admin_faq-list > td:nth-child(2) {width: 80px;}
+.admin_faq-list > td:nth-child(3) {width: 80px;}
+.admin_faq-list > td:nth-child(4) {width: 80px;}
+.admin_faq-list > td:nth-child(5) {width: auto; text-align: left;}
+.admin_faq-list > td:nth-child(6) {width: 80px;}
+.admin_faq-list > td:nth-child(7) {width: 80px;}
+.admin_faq-list > td:nth-child(8) {width: 80px;}
+
+/* 문의하기 */
+.admin_faq-list > td:nth-child(1) {width: 20px;}
+.admin_faq-list > td:nth-child(2) {width: 80px;}
+.admin_faq-list > td:nth-child(3) {width: 80px;}
+.admin_faq-list > td:nth-child(4) {width: 80px;}
+.admin_faq-list > td:nth-child(5) {width: auto; text-align: left;}
+.admin_faq-list > td:nth-child(6) {width: 80px;}
+.admin_faq-list > td:nth-child(7) {width: 80px;}
+.admin_faq-list > td:nth-child(8) {width: 80px;}
+

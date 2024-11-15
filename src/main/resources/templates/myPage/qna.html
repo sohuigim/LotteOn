@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{myPage/layout/mypage_layout2}"
+>
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/my/qna.css}" />
+  </th:block>
+  <th:block layout:fragment="script"> </th:block>
+  <section class="content" layout:fragment="content">
+    <a href="#"
+      ><img
+        src="/images/my/my_banner_sample.png"
+        alt="롯데ON에서 드리는 다양한 결제혜택"
+        class="banner"
+    /></a>
+    <!-- 810x86 배너 이미지 -->
+    <article class="latest">
+      <h3>문의하기</h3>
+      <table border="0" class="widthtable">
+        <tr>
+          <th>번호</th>
+          <th>문의채널</th>
+          <th>문의유형</th>
+          <th>제목</th>
+          <th>작성일</th>
+          <th>상태</th>
+        </tr>
+        <tr th:each="inquiry, iterStat : ${inquiries.content}">
+          <td th:text="${iterStat.index + 1}"></td>
+          <td th:text="${inquiry.type1}"></td>
+          <td th:text="${inquiry.type2}"></td>
+          <td>
+            <a th:href="@{/cs/layout/qna/view/{id}(id=${inquiry.id})}" th:text="${inquiry.title}"></a>
+          </td>
+          <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}"></td>
+          <td th:text="${inquiry.answer != null ? '답변완료' : '검토중'}"></td>
+        </tr>
+      </table>
+
+      <!-- 페이지네이션 -->
+      <div class="pagingBox" th:if="${inquiries.totalPages > 1}">
+        <div class="pagingList">
+          <!-- 이전 버튼 -->
+          <a th:href="@{/myPage/qna(pg=${inquiries.currentPage - 1})}"
+             class="prev" th:if="${!inquiries.isFirst}">&lt;</a>
+
+          <!-- 페이지 번호 버튼 -->
+          <a th:href="@{/myPage/qna(pg=${pageNumber - 1})}"
+             th:each="pageNumber : ${#numbers.sequence(1, inquiries.totalPages)}"
+             th:text="${pageNumber}"
+             th:classappend="${pageNumber == inquiries.currentPage + 1 ? 'active' : ''}"></a>
+
+          <!-- 다음 버튼 -->
+          <a th:href="@{/myPage/qna(pg=${inquiries.currentPage + 1})}"
+             class="next" th:if="${!inquiries.isLast}">&gt;</a>
+
+          <div class="pagingBox" th:if="${inquiries.totalPages > 1}">
+
+          </div>
+      </div>
+    </article>
+  </section>
+</html>

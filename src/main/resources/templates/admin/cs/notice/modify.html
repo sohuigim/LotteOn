@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/adminlayout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>공지사항 수정</title>
+  <link rel="stylesheet" th:href="@{/css/admin/cs/notice/modify.css}" />
+</head>
+
+<body>
+<div class="content" layout:fragment="content">
+  <div class="dashboard">
+    <div class="content_header">
+      <h1>공지사항 수정</h1>
+      <p>HOME > 고객센터 > 공지사항</p>
+    </div>
+    <article class="qna_article_write">
+      <form method="post" th:action="@{/admin/cs/notice/modify/{id}(id=${notice.id})}">
+        <table>
+          <tr>
+            <td>유형</td>
+            <td>
+              <select name="type1" id="typeSelect">
+                <option value="전체" th:selected="${notice.type1 == '전체'}">전체</option>
+                <option value="고객서비스" th:selected="${notice.type1 == '고객서비스'}">고객서비스</option>
+                <option value="안전거래" th:selected="${notice.type1 == '안전거래'}">안전거래</option>
+                <option value="위해상품" th:selected="${notice.type1 == '위해상품'}">위해상품</option>
+                <option value="이벤트당첨" th:selected="${notice.type1 == '이벤트당첨'}">이벤트당첨</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>제목</td>
+            <td>
+              <input type="text" name="title" placeholder="제목을 입력하세요." th:value="${notice.title}" required/>
+            </td>
+          </tr>
+          <tr>
+            <td>내용</td>
+            <td>
+              <textarea name="content" placeholder="내용을 입력하세요." required
+                        th:text="${notice.content}"></textarea>
+            </td>
+          </tr>
+        </table>
+        <div style="text-align: center; margin-top: 50px">
+          <a th:href="@{/admin/cs/notice/list}">
+            <button type="button" style="background-color: #9e9e9e; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px;">취소하기</button>
+          </a>
+          <input type="submit" value="수정하기" style="background-color: #4291e9; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px;"/>
+        </div>
+      </form>
+    </article>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!--
+    날짜 : 2024/10/21
+    이름 : 최준혁
+    내용 : 상점목록
+    수정이력
+        - 2024/10/21 최준혁,김소희 - html 작성
+        - 2024/10/28 이도영 - 상점 목록 출력 + Page 정리
+        - 2024/11/08 이도영 상점이 없으면 출력되지 않는 현상 처리
+-->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/adminlayout}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/admin/shop/list.css}" />
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+    <script th:src="@{/js/login/postcode.js}"></script>
+    <script th:src="@{/js/login/utils.js}"></script>
+    <script th:src="@{/js/shop/deleteShop.js}"></script>
+    <script type="text/javascript" th:src="@{/js/modal/modal.js}"></script>
+    <script th:src="@{/js/login/validationSeller.js}"></script>
+</th:block>
+
+<div class="content" layout:fragment="content">
+    <div th:replace="admin/include/admin_modal :: #sellerinsertmodal"></div>
+    <div class="dashboard">
+        <div class="content_header">
+            <h1>상점목록</h1>
+            <p>
+                HOME > 상점관리 > <strong>상점목록</strong>
+            </p>
+        </div>
+
+        <section class="sectionBox">
+            <div>
+                <form th:action="@{/admin/shop/list}" class="search_bar" method="get">
+                    <select name="type">
+                        <option value="shopName">상호명</option>
+                        <option value="representative">대표자</option>
+                        <option value="businessRegistration">사업자등록번호</option>
+                        <option value="contact">연락처</option>
+                        <option value="keyword">키워드</option>
+                    </select>
+                    <input class="searchInput" type="text" name="keyword">
+                    <input type="hidden" name="prodSeller" value="ADMIN" readonly>
+                    <input class="searchBtn" type="submit" value="검색">
+                </form>
+            </div>
+            <div class="operate">
+                <p class="running">● 운영중</p>
+                <p class="stopped">&nbsp;● 운영 중지</p>
+                <p class="preparing">&nbsp;● 운영 준비</p>
+            </div>
+            <table class="admingraph">
+                <tr class="admin_title">
+                    <th><input type="checkbox" name="allCheck" onclick="toggleAll(this)" /></th>
+                    <th>번호</th>
+                    <th>상호명</th>
+                    <th>대표</th>
+                    <th>사업자등록번호</th>
+                    <th>통신판매업번호</th>
+                    <th>연락처</th>
+                    <th>운영</th>
+                    <th>관리</th>
+                </tr>
+                <tr th:if="${shopdtos == null}">
+                    <td colspan="7" class="td_first" style="width: 100%">등록된 상점이 없습니다.</td>
+                </tr>
+                <tr class="admin_list" th:each="shop, stat : ${shopdtos.getDtoList()}" th:if="${shopdtos != null}">
+                    <td><input type="checkbox" value="noticeNo" name="RowCheck" th:value="${shop.id}"/></td>
+                    <td th:text="${shop.shopNumber}">연속적인 번호</td> <!-- 연속적인 번호 -->
+                    <td th:text="${shop.shopName}">상점 이름</td>
+                    <td th:text="${shop.representative}">대표자</td>
+                    <td th:text="${shop.businessRegistration}">사업자 등록번호</td>
+                    <td th:text="${shop.eCommerceRegistration}">전자상거래 등록번호</td>
+                    <td th:text="${shop.ph}">전화번호</td>
+                    <td th:style="${shop.isActive == 1 ? 'color:green' : shop.isActive == 0 ? 'color:blue' : 'color:red'}">
+                        ●
+                    </td>
+                    <td>
+                        <a th:text="${shop.isActive == 1 ? '[운영중]' : shop.isActive == 0 ? '[승인]' : '[재개]'}"></a>
+                    </td>
+                </tr>
+            </table>
+            <a class="delete_btn" href="javascript:void(0);">선택삭제</a>
+            <a href="#" data-modal="sellerinsertmodal" class="registration_btn">상점등록</a>
+            <div class="pagingBox">
+                <div class="pagingList">
+                    <a th:href="@{/admin/shop/list(pg=${shopdtos.start - 1}, type=${type}, keyword=${keyword})}" th:if="${shopdtos.prev}" class="prev">&#60;</a>
+                    <th:block th:each="num : ${#numbers.sequence(shopdtos.start, shopdtos.end)}">
+                        <a th:href="@{/admin/shop/list(pg=${num}, type=${type}, keyword=${keyword})}"
+                           th:classappend="${num == shopdtos.pg} ? 'active' : ''">[[${num}]]</a>
+                    </th:block>
+                    <a th:href="@{/admin/shop/list(pg=${shopdtos.end + 1}, type=${type}, keyword=${keyword})}" th:if="${shopdtos.next}" class="next">&#62;</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</html>

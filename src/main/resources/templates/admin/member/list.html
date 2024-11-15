@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/adminlayout}">
+<!--
+   날짜 : 2024/10/25
+   이름 : 이도영(최초 작성자)
+   내용 : Member list html 작성
+
+   수정이력
+   - 2025/10/24 박서홍 - 관리자 - 회원정보 출력 코드 수정
+   - 2025/10/25 박서홍 - 관리자 - 회원정보 검색 기능 구현
+   - 2025/10/28 박서홍 - 관리자 - 회원정보 수정 모달 기능 구현
+   - 2025/10/30 박서홍 - 관리자 - 회원정보 중지 기능 구현
+
+   -->
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/admin/member/list.css}" />
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/modal/modal.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/member/Member.js}"></script>
+    <script th:src="@{/js/login/validationSeller.js}"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</th:block>
+<div class="content" layout:fragment="content">
+    <div th:replace="admin/include/admin_modal :: #userchangemodal"></div>
+    <div class="dashboard">
+        <div class="content_header">
+            <h1>회원목록</h1>
+            <p>
+                HOME > 회원관리 > <strong>회원목록</strong>
+            </p>
+        </div>
+        <section class="sectionBox">
+            <div class="select-container">
+                <form action="/admin/member/list" class="search_bar">
+                    <select name="type">
+                        <option value="uid">아이디</option>
+                        <option value="name">이름</option>
+                        <option value="email">이메일</option>
+                        <option value="contact">휴대폰</option>
+                    </select>
+                    <input class="searchInput" type="text" name="keyword">
+                    <input type="hidden" name="prodSeller" value="ADMIN" readonly>
+                    <!-- 검색 버튼에 아이콘 추가 -->
+                    <button class="searchBtn" type="submit">
+                        <i class="fas fa-search"></i> 검색
+                    </button>
+                </form>
+            </div>
+            <table class="admingraph">
+                <thead>
+                <tr class="admin_title">
+                    <th><input type="checkbox" name="allCheck" id="allCheck" onchange="toggleAllChecks(this)" /></th>
+                    <th>번호</th>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>성별</th>
+                    <th>등급</th>
+                    <th>포인트</th>
+                    <th>이메일</th>
+                    <th>휴대폰</th>
+                    <th>가입일</th>
+                    <th>상태</th>
+                    <th>관리</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="member, stat : ${memberList}" class="admin_list" th:attr="data-member-id=${member.uid}">
+                    <td><input type="checkbox" th:value="${member.uid}" name="RowCheck" /></td>
+                    <td th:text="${stat.index + 1}">번호</td>
+                    <td th:text="${member.uid}">UID</td>
+                    <td th:text="${member.name}">이름</td>
+                    <td th:text="${member.gender == 'FEMALE' ? '여' : (member.gender == 'MALE' ? '남' : '')}">성별</td>
+                    <td>
+                        <select name="grade" th:disabled="${member.status == 2 || member.status == 3 || member.status == 4}">
+                            <option value="vvip" th:selected="${member.grade == 'vvip'}">VVIP</option>
+                            <option value="vip" th:selected="${member.grade == 'vip'}">VIP</option>
+                            <option value="gold" th:selected="${member.grade == 'gold'}">GOLD</option>
+                            <option value="silver" th:selected="${member.grade == 'silver'}">SILVER</option>
+                            <option value="family" th:selected="${member.grade == 'family'}">FAMILY</option>
+                            <option value="admin" th:selected="${member.grade == 'admin'}">ADMIN</option>
+                        </select>
+                    </td>
+
+                    <td th:text="${member.points}">포인트</td>
+                    <td th:text="${member.email}">이메일</td>
+                    <td th:text="${member.ph}">전화번호</td>
+                    <!-- 가입일 (포맷 지정) -->
+                    <td th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm:ss')}">가입일</td>
+                    <td th:text="${member.status == 0 ? '정상' : (member.status == 2 ? '중지' : (member.status == 3 ? '휴면' : (member.status == 4 ? '탈퇴' : (member.status == 5 ? '관리자' : '상태없음'))))}"
+                        th:classappend="${member.status == 0 ? 'status-normal' : (member.status == 2 ? 'status-stopped' : (member.status == 3 ? 'status-sleep' : (member.status == 4 ? 'status-exit' : (member.status == 5 ? 'status-admin' : 'status-unknown'))))}">
+                        상태
+                    </td>
+
+                    <td style="line-height: 20px">
+                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                            <a href="#" data-modal="userchangemodal" th:attr="data-user-id=${member.uid}"
+                               class="cs_modify-btn styled-button" onclick="openUserChangeModal(this)">
+                                <i class="fas fa-edit"></i> 수정
+                            </a>
+
+                            <div style="margin-top: 5px;">
+                                <a th:if="${member.status == 0 ||member.status == 5}" href="#"
+                                   th:id="'change-status-btn-' + ${member.uid}"
+                                   class="cs_delete-btn styled-button delete-button"
+                                   th:attr="data-uid=${member.uid}, data-status=${member.status}"
+                                   onclick="handleStatusClick(this)">
+                                    <i class="fa-regular fa-circle-stop"></i> 중지
+                                </a>
+
+                                <a th:if="${member.status == 2 || member.status == 3}" href="#"
+                                   th:id="'reactivate-status-btn-' + ${member.uid}"
+                                   class="cs_delete-btn styled-button delete-button"
+                                   th:attr="data-uid=${member.uid}, data-status=${member.status}"
+                                   onclick="handleStatusClick(this)">
+                                    <i class="fa-regular fa-circle-check"></i> 재개
+                                </a>
+
+                                <a th:if="${member.status == 4}" href="#"
+                                   th:id="'deactivate-status-btn-' + ${member.uid}"
+                                   class="cs_delete-btn styled-button delete-button"
+                                   th:attr="data-uid=${member.uid}, data-status=${member.status}"
+                                   onclick="handleStatusClick(this)">
+                                    <i class="fa-regular fa-circle-xmark"></i> 비활성
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+            <button class="btn insert_btn" >
+                <i class="fa-solid fa-pen-to-square"></i>선택수정
+            </button>
+            <div class="pagingBox">
+                <div class="pagingList">
+                    <th:block th:if="${pageInfo.prev}">
+                        <a th:href="@{/admin/member/list(pg=${pageInfo.pg - 1})}" class="prev">←</a>
+                    </th:block>
+                    <th:block th:each="num : ${#numbers.sequence(pageInfo.start, pageInfo.end)}">
+                        <a th:href="@{/admin/member/list(pg=${num})}" th:text="${num}" th:classappend="${pageInfo.pg == num} ? 'active'"></a>
+                    </th:block>
+                    <th:block th:if="${pageInfo.next}">
+                        <a th:href="@{/admin/member/list(pg=${pageInfo.pg + 1})}" class="next">→</a>
+                    </th:block>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</html>

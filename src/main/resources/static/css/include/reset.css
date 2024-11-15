@@ -1,0 +1,88 @@
+* {
+    box-sizing: border-box;
+  font-family: 'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;
+  }
+
+  body {
+    font-family: "Inter", sans-serif;
+  }
+
+  button {
+    border: none;
+    background: transparent;
+  }
+
+  button:focus,
+  button:active,
+  textarea:focus,
+  textarea:active,
+  input:focus,
+  input:active {
+    box-shadow: none;
+    outline: none;
+  }
+
+  ul,
+  ol,
+  li {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    font-family: 'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif;
+  }
+
+/* Top 버튼 스타일 */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #ef2a23;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* 버튼 호버 시 스타일 */
+.scroll-top-btn:hover {
+  background-color: #d9201f;
+}
+
+/* 스크롤 시 버튼 표시 */
+.scroll-top-btn.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 아이콘 크기 조정 */
+.scroll-top-btn i {
+  font-size: 20px;
+}
+
+
+/* 반응형 설정: 창 크기가 작아질 때 위치 조정 */
+@media screen and (max-width: 768px) {
+  .scroll-top-btn {
+    right: 10px; /* 작은 화면에서는 10px로 고정 */
+    bottom: 10px; /* 하단에서 10px 위치 */
+  }
+}
+
+.center{
+  margin: 0 auto;
+}
+
+

@@ -1,0 +1,84 @@
+<div class="qna" th:fragment="view">
+
+  <!--
+    날짜 : 2024/10/18
+    이름 : 최준혁
+    내용 : 고객센터 문의하기 글보기
+
+    수정이력
+    - 2024/10/25 김소희 - 동적처리
+  -->
+  
+  <nav>
+    <div>
+      <p>홈<span>></span>문의하기</p>
+    </div>
+  </nav>
+  <section class="view">
+    <aside class="cs_sidebar">
+      <h2>문의하기</h2>
+      <ul>
+        <li><a th:href="@{/cs/layout/qna/list?type1=회원}" th:classappend="${type1 == '회원'} ? 'active'">회원</a></li>
+        <li><a th:href="@{/cs/layout/qna/list?type1=쿠폰/이벤트}" th:classappend="${type1 == '쿠폰/이벤트'} ? 'active'">쿠폰 / 이벤트</a></li>
+        <li><a th:href="@{/cs/layout/qna/list?type1=주문/결제}" th:classappend="${type1 == '주문/결제'} ? 'active'">주문 / 결제</a></li>
+        <li><a th:href="@{/cs/layout/qna/list?type1=배송}" th:classappend="${type1 == '배송'} ? 'active'">배송</a></li>
+        <li><a th:href="@{/cs/layout/qna/list?type1=취소/반품/교환}" th:classappend="${type1 == '취소/반품/교환'} ? 'active'">취소 / 반품 / 교환</a></li>
+        <li><a th:href="@{/cs/layout/qna/list?type1=여행/숙박/항공}" th:classappend="${type1 == '여행/숙박/항공'} ? 'active'">여행 / 숙박 / 항공</a></li>
+        <li><a th:href="@{/cs/layout/qna/list?type1=안전거래}" th:classappend="${type1 == '안전거래'} ? 'active'">안전거래</a></li>
+      </ul>
+    </aside>
+
+    <article class="qna_article_view">
+      <nav>
+        <h1 th:text="${inquiry.type1}">회원</h1> <!-- 문의 유형 -->
+        <h2 th:text="${inquiry.title}">회원 관련 문의 내용입니다.</h2> <!-- 문의 제목 -->
+      </nav>
+      <div class="content">
+<!--        문의 -->
+        <div class="qna-item">
+          <button class="qna-question" onclick="toggleFaq(this)">
+            <span class="highlight" th:text="|[${inquiry.type2}] ${inquiry.title}|"></span>
+            <span class="highlight" th:text="|${inquiry.memberId.substring(0, 3)}***|"></span>
+            <span class="date" th:text="${#temporals.format(inquiry.createdAt, 'yy-MM-dd')}"></span><br>
+            <span th:text="${inquiry.content}"></span>
+          </button>
+<!--          답변 -->
+          <div class="qna-answer">
+            <div class="qna-answer-title" th:text="|☛ [답변] ${inquiry.title}|"></div>
+            <p th:text="${inquiry.answer ?: '답변이 없습니다.'}"></p>
+          </div>
+          <script>
+            function toggleFaq(button) {
+              const faqAnswer = button.nextElementSibling;
+              // 클래스 이름을 찾기
+              const allAnswers = document.querySelectorAll('.qna-answer');
+
+
+              // 모든 열린 답변 닫기(전체 열렸었던 답변들이 바로 닫히도록)
+              allAnswers.forEach(answer => {
+                if (answer !== faqAnswer) {
+                  answer.style.display = 'none';
+                  answer.previousElementSibling.classList.remove('active');
+                }
+              });
+
+              // 선택한 답변 토글(동적처리를 위해서 스타일 처리문구)
+              if (faqAnswer.style.display === 'block') {
+                faqAnswer.style.display = 'none';
+                button.classList.remove('active');
+              } else {
+                faqAnswer.style.display = 'block';
+                button.classList.add('active');
+              }
+            }
+          </script>
+            <!-- 여기에는 문의 내용이 동적으로 출력됨 -->
+          </div>
+        </div>
+        <!-- 목록으로 돌아가는 버튼 -->
+<!--        <a th:href="@{/cs/layout/qna/list}" class="btnList">목록</a>-->
+      <a th:href="@{/cs/layout/qna/list(type1=${inquiry.type1})}" class="btnList">목록</a>
+        </div>
+    </article>
+  </section>
+</div>

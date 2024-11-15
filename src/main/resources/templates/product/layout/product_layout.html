@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lagn="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/include/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product/product.css}"/>
+    <link rel="stylesheet" th:href="@{/css/include/layout.css}"/>
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{'/'+${appInfo.uploadDir}+'logo/'+${config.favicon}}">
+<head>
+  <meta charset="UTF-8" />
+  <title>product layout</title>
+  <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0" />
+  <!-- content script -->
+  <th:block layout:fragment="css"></th:block>
+  <!-- content script -->
+  <th:block layout:fragment="script"></th:block>
+</head>
+    <body>
+        <!-- header -->
+        <header th:replace="~{layout/header::header}"></header>
+        <header th:replace="~{layout/header-nav}"></header>
+        <div class="layout-container">
+            <th:block th:replace="~{layout/aside-best}"></th:block>
+            <!-- aside -->
+
+          <!-- content fragment 사용 -->
+            <div class="layout-right">
+                 <th:block layout:fragment="content"></th:block>
+            </div>
+        </div>
+        <!-- footer -->
+        <footer th:replace="~{layout/footer::footer}"></footer>
+    </body>
+</html>

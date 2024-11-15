@@ -1,0 +1,32 @@
+spring:
+  servlet:
+    multipart:
+      location: uploads/
+  application:
+    name: lotteon
+  profiles:
+    active: dev
+    include: local
+  thymeleaf:
+    prefix: classpath:/templates/
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dlehdud224@gmail.com
+    password: xjoo ebnq ppso nxst
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  cache:
+    redis:
+      time-to-live: 1800000
+  data:
+    redis:
+      host: asd
+      port: 3333
+      password: asd
+app:
+  version: '1조 - 0.0.4-SNAPSHOT'

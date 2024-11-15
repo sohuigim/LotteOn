@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteON 서비스 이용약관</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/policy/policy.css}"/>
+    <link rel="stylesheet" th:href="@{/css/include/header.css}">
+    <link rel="stylesheet" th:href="@{/css/include/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/include/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/include/layout.css}"/>
+    <script type="text/javascript" th:src="@{/js/policy/policy.js}"></script>
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{'/'+${appInfo.uploadDir}+'logo/'+${config.favicon}}">
+</head>
+
+<body>
+<!-- Header -->
+<th:block th:replace="~{layout/header::header}"></th:block>
+<th:block th:replace="~{layout/header-nav}"></th:block>
+
+<!-- Main Content -->
+<div class="layout-container">
+    <!-- Aside Section -->
+    <aside class="layout-left">
+        <th:block th:replace="~{layout/aside-cate}"></th:block>
+    </aside>
+
+    <!-- Main Section -->
+    <main>
+        <h1>LotteON 서비스 이용약관</h1>
+
+        <!-- 인쇄 버튼 추가 -->
+        <button onclick="printPage()" class="print-button">
+            <img src="/images/print.png" alt="print" /></button>
+
+        <!-- Terms Tabs -->
+        <div class="terms-tabs">
+            <a th:href="@{/policy/buyer}">
+                <img th:src="@{/images/policy/termsicon1.png}" alt="구매자 약관"/>
+            </a>
+            <a th:href="@{/policy/seller}">
+                <img th:src="@{/images/policy/termsicon2.png}" alt="판매자 약관"/>
+            </a>
+            <a th:href="@{/policy/finance}">
+                <img th:src="@{/images/policy/termsicon3.png}" alt="전자금융 약관"/>
+            </a>
+            <a th:href="@{/policy/location}">
+                <img th:src="@{/images/policy/termsicon4.png}" alt="위치정보 약관"/>
+            </a>
+            <a th:href="@{/policy/privacy}">
+                <img th:src="@{/images/policy/termsicon5.png}" alt="개인정보 처리방침"/>
+            </a>
+        </div>
+
+        <!-- 약관 섹션 -->
+        <section class="terms-policy-section">
+            <!-- Terms Section -->
+            <div class="terms-title" onclick="toggleContent(this)">
+                <h3 th:text="${terms}">약관 제목</h3>
+                <!-- 버튼을 하나만 유지 -->
+                <img th:src="@{/images/policy/minus.png}" alt="접기" class="toggle-icon" /> <!-- 접기 상태 이미지 -->
+            </div>
+            <div class="terms-content" style="display: block;">  <!-- 기본적으로 펼쳐진 상태 -->
+                <p th:utext="${termsDetail}" style="white-space: pre-wrap;"></p>  <!-- 약관 내용 출력 -->
+            </div>
+
+
+
+            <!-- 스크롤 최상단 버튼 -->
+            <button id="scrollTopBtn" class="scroll-top-btn" onclick="scrollToTop()">
+                <img src="/images/up.png" alt="scroll to top" />
+            </button>
+        </section>
+
+    </main>
+</div>
+
+<!-- Footer -->
+
+<th:block th:replace="~{layout/footer::footer}"></th:block>
+
+
+</body>
+</html>

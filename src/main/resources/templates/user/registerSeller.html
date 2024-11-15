@@ -1,0 +1,133 @@
+<!--
+    날짜 : 2024/10/25
+    이름 : 강유정(최초 작성자)
+    내용 : 회원가입 html 생성
+    수정내용
+        - 2024/11/06 이도영 판매자 이메일 입력
+-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 가입</title>
+    <link rel="stylesheet" th:href="@{/css/user/user_style.css}">
+    <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+    <script th:src="@{/js/login/postcode.js}"></script>
+    <script th:src="@{/js/login/utils.js}"></script>
+    <script th:src="@{/js/login/validationSeller.js}"></script>
+</head>
+<body>
+<header th:replace="~{layout/header::header}"></header>
+
+<div id="wrapper">
+    <section class="user-section">
+        <h2>판매자 회원가입</h2>
+        <form class="sendForm" th:action="@{/user/register/seller}" method="post">
+            <table border="0" class="heighttable">
+                <tr>
+                    <th>아이디<span class="required">*</span></th>
+                    <td>
+                        <input type="text" name="uid" placeholder="아이디 입력"/>
+                        <button type="button" id="btnCheckUid" name="uidbtn" data-type="uid" class="infobutton">중복확인</button>
+                        <span class="resultId"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>비밀번호<span class="required">*</span></th>
+                    <td><input type="password" name="pass"></td>
+                </tr>
+                <tr>
+                    <th>비밀번호 확인</th>
+                    <td><input type="password" name="pass2">
+                        <span class="resultPass"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>EMAIL<span class="required">*</span></th>
+                    <td>
+                        <input type="email" name="email" placeholder="이메일입력"/>
+                        <button type="button" id="btnSendEmail" name="btnEmail" data-type="email" class="infobutton">인증번호 받기</button>
+                        <span id="resultEmail"></span>
+                        <div class="auth" style="display:none">
+                            <input type="text" name="userauth" class="userauth" placeholder="인증번호 입력" />
+                            <button type="button" id="btnAuthEmail"  class="infobutton">인증확인</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <table border="0" class="heighttable">
+                <tr>
+                    <th>회사명<span class="required">*</span></th>
+                    <td><input type="text" name="shopName" placeholder="상호명입력예 ) (주)"/>
+                        <span class="resultShop_name"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>대표<span class="required">*</span></th>
+                    <td><input type="text" name="representative" placeholder="성함입력"/>
+                        <span class="resultRepresentative"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>사업자등록번호<span class="required">*</span></th>
+                    <td>
+                        <input type="text" name="business_registration_part1" id="business_registration_part1" maxlength="3" style="width: 50px;" /> -
+                        <input type="text" name="business_registration_part2" id="business_registration_part2" maxlength="2" style="width: 45px;" /> -
+                        <input type="text" name="business_registration_part3" id="business_registration_part3" maxlength="5" style="width: 60px;" />
+                        <input type="hidden" name="businessRegistration"/>
+                        <span class="resultBusiness_registration"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>통신판매업번호<span class="required">*</span></th>
+                    <td>
+                        <input type="text" name="e_commerce_registration_part1" id="e_commerce_registration_part1" maxlength="4" style="width: 70px;" /> -
+                        <input type="text" name="e_commerce_registration_part2" id="e_commerce_registration_part2" maxlength="5" style="width: 100px;" /> -
+                        <input type="text" name="e_commerce_registration_part3" id="e_commerce_registration_part3" maxlength="4" style="width: 60px;" />
+                        <input type="hidden" name="eCommerceRegistration" />
+                        <span class="resultE_commerce_registration"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>전화번호<span class="required">*</span></th>
+                    <td><input type="text" name="ph" placeholder="전화번호입력"/>
+                        <span class="resultPh"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>팩스</th>
+                    <td><input type="text" name="fax" placeholder="팩스번호입력"/>
+                        <span class="resultFax"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>주소<span class="required">*</span></th>
+                    <td>
+                        <div>
+                            <input type="text" name="zip" id="zip" placeholder="우편번호" readonly/>
+                            <button type="button" class="btnZip infobutton" onclick="postcode()">검색</button>
+                        </div>
+                        <div>
+                            <input type="text" name="addr1" id="address1" placeholder="주소를 검색하세요." readonly/>
+                        </div>
+                        <div>
+                            <input type="text" name="addr2" id="address2" placeholder="상세주소를 입력하세요."/>
+                            <span class="resultaddr"></span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="registerbuttondiv">
+                <button class="registerbutton" type="submit">등록하기</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+</body>
+</html>
